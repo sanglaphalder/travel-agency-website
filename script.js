@@ -59,7 +59,6 @@ if (themeToggle) {
     });
 }
 
-// SMOOTH SCROLL FIX FOR ANCHOR LINKS
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function (e) {
