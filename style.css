@@ -255,7 +255,7 @@ body {
 
 .card img {
     width: 100%;
-    height: 320px;
+    height: 280px;
     object-fit: cover;
 }
 
@@ -336,9 +336,7 @@ body {
     }
 }
 
-/* ========================= */
-/* MOBILE RESPONSIVE DESIGN  */
-/* ========================= */
+/* RESPONSIVE */
 
 @media (max-width: 768px) {
 
