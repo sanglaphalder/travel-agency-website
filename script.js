@@ -71,3 +71,43 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// CONTACT FORM HANDLING
+
+const contactForm = document.querySelector(".contact-form");
+
+if (contactForm) {
+
+    contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = contactForm.querySelector("input[type='text']");
+        const email = contactForm.querySelector("input[type='email']");
+        const message = contactForm.querySelector("textarea");
+
+        // VALIDATION
+        if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // EMAIL VALIDATION
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (!email.value.match(emailPattern)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        // SUCCESS MESSAGE
+        alert("Thank you for contacting Ruler Travels! We will get back to you soon.");
+
+        // RESET FORM
+        contactForm.reset();
+
+        // CLOSE MOBILE MENU IF OPEN
+        if (navLinks.classList.contains("active")) {
+            navLinks.classList.remove("active");
+        }
+    });
+
+}
