@@ -441,6 +441,11 @@ body.menu-open {
         padding: 12px 18px;
     }
 
+    .nav-left {
+        display: flex;
+        align-items: center;
+    }
+
     .nav-left h2 {
         font-size: 1.1rem;
     }
@@ -461,8 +466,8 @@ body.menu-open {
     .nav-links {
         position: fixed;
         top: 65px;
-        left: 0;              /* FIXED */
-        width: 100%;          /* FULL WIDTH */
+        left: 0;
+        width: 100%;
         height: calc(100vh - 65px);
 
         background: linear-gradient(to bottom, var(--primary), var(--accent));
