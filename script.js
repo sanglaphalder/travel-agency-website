@@ -8,6 +8,7 @@ const body = document.body;
 if (hamburger) {
     hamburger.addEventListener("click", () => {
         navLinks.classList.toggle("active");
+        body.classList.toggle("menu-open");
     });
 }
 
@@ -18,6 +19,7 @@ const navItems = document.querySelectorAll(".nav-links a");
 navItems.forEach(link => {
     link.addEventListener("click", () => {
         navLinks.classList.remove("active");
+        body.classList.remove("menu-open");
     });
 });
 
@@ -30,6 +32,7 @@ document.addEventListener("click", (e) => {
         !hamburger.contains(e.target)
     ) {
         navLinks.classList.remove("active");
+        body.classList.remove("menu-open");
     }
 });
 
