@@ -66,6 +66,14 @@ body.menu-open {
     width: auto;
 }
 
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
 /* CENTER */
 
 .nav-links {
