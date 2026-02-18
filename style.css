@@ -61,6 +61,17 @@ body {
     height: 42px;
 }
 
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-link:hover {
+    opacity: 0.9;
+}
+
 /* CENTER */
 
 .nav-links {
@@ -357,7 +368,8 @@ body {
 }
 
 .footer a:hover {
-    text-decoration: underline;
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
 .copyright {
@@ -388,6 +400,7 @@ body {
 }
 
 .social-links a:hover {
+    text-decoration: none;
     background-color: var(--primary);
     transform: translateY(-5px);
 }
