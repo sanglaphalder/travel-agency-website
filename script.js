@@ -6,17 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
 
-    /* =========================
-       HAMBURGER MENU TOGGLE
-    ========================= */
+    // HAMBURGER MENU TOGGLE
 
     hamburger.addEventListener("click", function () {
         navLinks.classList.toggle("active");
     });
 
-    /* =========================
-       CLOSE MENU WHEN LINK CLICKED
-    ========================= */
+    // CLOSE MENU WHEN LINK CLICKED
 
     navLinkItems.forEach(link => {
         link.addEventListener("click", function () {
@@ -24,9 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    /* =========================
-       CLOSE MENU WHEN CLICKING OUTSIDE
-    ========================= */
+    // CLOSE MENU WHILE CLICKING OUTSIDE
 
     document.addEventListener("click", function (event) {
         const isClickInsideMenu = navLinks.contains(event.target);
@@ -37,9 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    /* =========================
-       CLOSE MENU ON RESIZE
-    ========================= */
+    // CLOSE MENU ON RESIZE
 
     window.addEventListener("resize", function () {
         if (window.innerWidth > 768) {
@@ -47,9 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    /* =========================
-       THEME TOGGLE
-    ========================= */
+    // THEME TOGGLE
 
     // Load saved theme
     if (localStorage.getItem("theme") === "dark") {
