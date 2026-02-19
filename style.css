@@ -420,13 +420,14 @@ body {
         padding: 12px 20px;
     }
 
-    .nav-links {
+   .nav-links {
         position: fixed;
         top: 65px;
-        right: 0;
+        left: 0;
         width: 100%;
         height: calc(100vh - 65px);
         background: linear-gradient(to bottom, var(--primary), var(--accent));
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -438,6 +439,14 @@ body {
 
     .nav-links.active {
         transform: translateX(0);
+    }
+
+    .nav-links li {
+        list-style: none;
+    }
+
+    .nav-links a {
+        font-size: 22px;
     }
 
     .hamburger {
@@ -463,5 +472,8 @@ body {
     .social-links {
         justify-content: center;
     }
+}
 
+body.no-scroll {
+    overflow: hidden;
 }
