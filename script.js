@@ -1,21 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Select required elements
     const hamburger = document.getElementById("hamburger");
     const navLinks = document.getElementById("nav-links");
     const navLinkItems = document.querySelectorAll(".nav-links a");
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
 
-    // Toggle hamburger menu
+    // Toggle hamburger menu + prevent background scroll
     hamburger.addEventListener("click", function () {
         navLinks.classList.toggle("active");
+        body.classList.toggle("no-scroll");
     });
 
     // Close menu when a link is clicked
     navLinkItems.forEach(function (link) {
         link.addEventListener("click", function () {
             navLinks.classList.remove("active");
+            body.classList.remove("no-scroll");
         });
     });
 
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!isClickInsideMenu && !isClickHamburger) {
             navLinks.classList.remove("active");
+            body.classList.remove("no-scroll");
         }
     });
 
@@ -33,16 +35,17 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", function () {
         if (window.innerWidth > 768) {
             navLinks.classList.remove("active");
+            body.classList.remove("no-scroll");
         }
     });
 
-    // Load saved theme from localStorage
+    // Load saved theme
     if (localStorage.getItem("theme") === "dark") {
         body.classList.add("dark");
         themeToggle.textContent = "☀️";
     }
 
-    // Toggle theme on button click
+    // Toggle theme
     themeToggle.addEventListener("click", function () {
         body.classList.toggle("dark");
 
