@@ -1,6 +1,8 @@
 const User = require('../Models/UserModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const supabase = require('../config/supabaseClient');
+const { sendEmail } = require('../config/emailConfig');
 
 const register = async (req, res) => {
     try {
@@ -55,8 +57,6 @@ const login = async (req, res) => {
     }
 };
 
-const { sendEmail } = require('../config/emailConfig');
-
 const sendPasswordResetOtp = async (req, res) => {
     try {
         const { email } = req.body;
@@ -101,7 +101,7 @@ const sendPasswordResetOtp = async (req, res) => {
 const forgotOtp = async (req, res) => {
     const { email } = req.body;
     if (!email) {
-        return res.status(400).json({ success: false, message: "Email is Required" })
+        return res.status(400).json({ success: false, message: "Email is Required" });
     }
     try {
         const user = await User.findOne({ email });
@@ -132,15 +132,15 @@ Please do not share it with anyone.
                     <p style="font-size: 12px; color: #bdc3c7; text-align: center;">&copy; ${new Date().getFullYear()} TravelAgency Team</p>
                 </div>
             `
-        }
+        };
         sendEmail(mailOption).catch(err => {
             console.log("otp mailed failed", err.message);
-        })
-        return res.status(201).json({ success: true, message: "otp send to mail", next: "verify the otp" })
+        });
+        return res.status(201).json({ success: true, message: "otp send to mail", next: "verify the otp" });
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
     }
-}
+};
 
 const resetPassword = async (req, res) => {
     try {
@@ -156,11 +156,57 @@ const resetPassword = async (req, res) => {
         user.resetOtp = '';
         user.resetOtpExpire = 0;
         await user.save();
-
         res.status(200).json({ success: true, message: 'Password reset successful' });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
-module.exports = { register, login, sendPasswordResetOtp, resetPassword, forgotOtp };
+const googleAuth = async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        if (!token) {
+            return res.status(400).json({ success: false, message: 'Token is required' });
+        }
+
+        const { data: { user: supabaseUser }, error } = await supabase.auth.getUser(token);
+
+        if (error || !supabaseUser) {
+            return res.status(401).json({ success: false, message: 'Invalid or expired token' });
+        }
+
+        const { email, id: supabaseUid, user_metadata } = supabaseUser;
+        const name = user_metadata.full_name || user_metadata.name || email.split('@')[0];
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            user = await User.create({
+                name,
+                email,
+                googleId: supabaseUid
+            });
+        } else if (!user.googleId) {
+            user.googleId = supabaseUid;
+            await user.save();
+        }
+
+        const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+        res.status(200).json({
+            success: true,
+            message: 'Google login successful',
+            token: jwtToken,
+            userData: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+module.exports = { register, login, sendPasswordResetOtp, resetPassword, forgotOtp, googleAuth };

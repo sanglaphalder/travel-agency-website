@@ -12,8 +12,16 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: function () {
+            return !this.googleId; // Password is required only if googleId is not present
+        }
     },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows multiple null/undefined values
+    },
+
     resetOtp: {
         type: String,
         default: ''
