@@ -140,23 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (signupBtn) signupBtn.style.display = "none";
 
             if (authBtn) {
-                authBtn.style.display = "inline-block";
-                authBtn.textContent = "Logout";
-                authBtn.href = "#";
-                authBtn.classList.remove("btn-login");
-                authBtn.classList.add("btn-logout");
-                authBtn.style.padding = "8px 18px";
-                authBtn.style.backgroundColor = "#D32F2F";
-                authBtn.style.color = "#fff";
-                authBtn.style.border = "none";
-
-                authBtn.onclick = (e) => {
-                    e.preventDefault();
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    showToast("Logged out successfully");
-                    setTimeout(() => { window.location.reload(); }, 1500);
-                };
+                authBtn.style.display = "none";
             }
 
             if (profileCont) {
@@ -356,8 +340,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const logoutBtn = profileDropdown.querySelector("a[href='#']");
         if (logoutBtn) {
-            logoutBtn.addEventListener("click", function (e) {
+            logoutBtn.addEventListener("click", async function (e) {
                 e.preventDefault();
+                try {
+                    await fetch(`${API_URL}/logout`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" }
+                    });
+                } catch (error) {
+                    console.error("Logout API error:", error);
+                }
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 showToast("Logged out successfully!");
