@@ -1,62 +1,136 @@
-document.addEventListener("DOMContentLoaded", function () {
+/**
+ * ============================================
+ * NAVBAR INJECTION - MINIMAL IMPLEMENTATION
+ * ============================================
+ */
 
-    const hamburger = document.getElementById("hamburger");
-    const navLinks = document.getElementById("nav-links");
-    const navLinkItems = document.querySelectorAll(".nav-links a");
-    const themeToggle = document.getElementById("theme-toggle");
-    const body = document.body;
+// Load navbar.html and inject into page
+async function loadNavbarComponent() {
+    try {
+        // Determine correct path based on page location
+        const currentPath = window.location.pathname;
+        const navbarPath = currentPath.includes('/html/') ? './navbar.html' : './html/navbar.html';
+        
+        const response = await fetch(navbarPath);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const navbarHTML = await response.text();
+        
+        // Insert navbar at top of body
+        document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+        console.log('✅ Navbar loaded');
+        return true;
+    } catch (error) {
+        console.error('❌ Navbar load failed:', error.message);
+        return false;
+    }
+}
 
-    // Toggle hamburger menu + prevent background scroll
-    hamburger.addEventListener("click", function () {
-        navLinks.classList.toggle("active");
-        body.classList.toggle("no-scroll");
-    });
+// Update logo based on theme
+function updateLogoForTheme() {
+    const logoImg = document.getElementById('logo');
+    if (!logoImg) return;
+    
+    const isLight = window.location.pathname.includes('/html/');
+    const darkThemeActive = document.body.classList.contains('dark');
+    
+    if (isLight) {
+        // Pages in /html folder
+        logoImg.src = darkThemeActive ? '../assets/dark_logo.png' : '../assets/light_logo.png';
+    } else {
+        // Root level pages
+        logoImg.src = darkThemeActive ? 'assets/dark_logo.png' : 'assets/light_logo.png';
+    }
+}
 
-    // Close menu when a link is clicked
-    navLinkItems.forEach(function (link) {
-        link.addEventListener("click", function () {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
-        });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener("click", function (event) {
-        const isClickInsideMenu = navLinks.contains(event.target);
-        const isClickHamburger = hamburger.contains(event.target);
-
-        if (!isClickInsideMenu && !isClickHamburger) {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
+// Highlight current page link in navbar
+function highlightActivePage() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+        const dataPage = link.getAttribute('data-page');
+        if (dataPage === currentPage) {
+            link.classList.add('active');
         }
     });
+}
 
-    // Close menu on window resize
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
-        }
-    });
-
-    // Load saved theme
-    if (localStorage.getItem("theme") === "dark") {
-        body.classList.add("dark");
-        themeToggle.textContent = "☀️";
+// ========================================
+// MAIN: Initialize on page load
+document.addEventListener("DOMContentLoaded", async function () {
+    
+    // Load navbar
+    const navbarLoaded = await loadNavbarComponent();
+    
+    if (!navbarLoaded) {
+        console.warn('⚠️ Could not load navbar');
+        return;
     }
 
-    // Toggle theme
-    themeToggle.addEventListener("click", function () {
-        body.classList.toggle("dark");
+    // Setup navbar interactions
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const navLinkItems = document.querySelectorAll('.nav-links a');
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
 
-        if (body.classList.contains("dark")) {
-            localStorage.setItem("theme", "dark");
-            themeToggle.textContent = "☀️";
-        } else {
-            localStorage.setItem("theme", "light");
-            themeToggle.textContent = "🌙";
+    // Hamburger menu toggle
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function () {
+            navLinks.classList.toggle('active');
+            body.classList.toggle('no-scroll');
+        });
+
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            });
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            }
+        });
+    }
+
+    // Theme toggle
+    if (themeToggle) {
+        // Apply saved theme on page load
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark');
+            themeToggle.textContent = '☀️';
         }
-    });
+        updateLogoForTheme();
+
+        themeToggle.addEventListener('click', function () {
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '🌙';
+            }
+            updateLogoForTheme();
+        });
+    }
+
+    // Highlight active page
+    highlightActivePage();
+
+    // ========== EXISTING AUTH & FORM CODE CONTINUES BELOW ===========
 
     // --- AUTH INTEGRATION ---
 
@@ -323,43 +397,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const profileTrigger = document.getElementById("profile-trigger");
-    const profileDropdown = document.getElementById("profile-dropdown");
-
-    if (profileTrigger && profileDropdown) {
-        profileTrigger.addEventListener("click", function (e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle("active");
-        });
-
-        document.addEventListener("click", function (e) {
-            if (!profileTrigger.contains(e.target)) {
-                profileDropdown.classList.remove("active");
-            }
-        });
-
-        const logoutBtn = profileDropdown.querySelector("a[href='#']");
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", async function (e) {
-                e.preventDefault();
-                try {
-                    await fetch(`${API_URL}/logout`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" }
-                    });
-                } catch (error) {
-                    console.error("Logout API error:", error);
-                }
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                showToast("Logged out successfully!");
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
-            });
-        }
-    }
-    // (Old checkAuth function removed. Handled by updateNavForUser)
+    // (Old checkAuth and profile dropdown removed. Navbar is now simplified to core navigation only)
+    // Auth features can be handled separately if needed
 
 
 });

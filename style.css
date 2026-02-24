@@ -232,6 +232,14 @@ body.dark .nav-links a::after {
     background: var(--accent);
 }
 
+body.dark .nav-links a.active {
+    font-weight: 700;
+}
+
+body.dark .nav-links a.active::after {
+    background: var(--accent);
+}
+
 /* Dark Mode Typography Refinement */
 
 body.dark h1,
@@ -339,6 +347,15 @@ body {
 }
 
 .nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Active page link */
+.nav-links a.active {
+    font-weight: 700;
+}
+
+.nav-links a.active::after {
     width: 100%;
 }
 
