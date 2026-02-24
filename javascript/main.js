@@ -35,11 +35,6 @@ function renderTours() {
         grid.appendChild(card);
     });
 }
-fetch("html/footer.html")
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("footer-placeholder").innerHTML = data;
-    });
 
 /**
  * HOOK: SEARCH/FILTER FUNCTIONALITY
