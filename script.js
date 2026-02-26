@@ -10,13 +10,13 @@ async function loadNavbarComponent() {
         // Determine correct path based on page location
         const currentPath = window.location.pathname;
         const navbarPath = currentPath.includes('/html/') ? './navbar.html' : './html/navbar.html';
-        
+
         const response = await fetch(navbarPath);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
         const navbarHTML = await response.text();
-        
+
         // Insert navbar at top of body
         document.body.insertAdjacentHTML('afterbegin', navbarHTML);
         console.log('✅ Navbar loaded');
@@ -31,10 +31,10 @@ async function loadNavbarComponent() {
 function updateLogoForTheme() {
     const logoImg = document.getElementById('logo');
     if (!logoImg) return;
-    
+
     const isLight = window.location.pathname.includes('/html/');
     const darkThemeActive = document.body.classList.contains('dark');
-    
+
     if (isLight) {
         // Pages in /html folder
         logoImg.src = darkThemeActive ? '../assets/dark_logo.png' : '../assets/light_logo.png';
@@ -48,7 +48,7 @@ function updateLogoForTheme() {
 function highlightActivePage() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.nav-links a');
-    
+
     navLinks.forEach(link => {
         const dataPage = link.getAttribute('data-page');
         if (dataPage === currentPage) {
@@ -60,13 +60,12 @@ function highlightActivePage() {
 // ========================================
 // MAIN: Initialize on page load
 document.addEventListener("DOMContentLoaded", async function () {
-    
+
     // Load navbar
     const navbarLoaded = await loadNavbarComponent();
-    
+
     if (!navbarLoaded) {
-        console.warn('⚠️ Could not load navbar');
-        return;
+        console.warn('⚠️ Could not load navbar, continuing with auth setup...');
     }
 
     // Setup navbar interactions
@@ -134,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // --- AUTH INTEGRATION ---
 
-    const API_URL = "https://travel-agency-website-e834.onrender.com/api/auth";
+    const API_URL = "http://localhost:3000/api/auth";
 
     // Helper for Toast Notifications
     function showToast(message, type = "success") {
