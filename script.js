@@ -65,14 +65,8 @@ async function loadNavbarComponent() {
                     if (isInHtmlFolder) {
                         if (href.startsWith('html/')) {
                             newHref = href.replace('html/', '');
-                        } else if (href === 'index.html') {
-                            newHref = '../index.html';
-                        } else if (!href.includes('/') && href !== 'index.html') {
-                            // same folder, stays as is
-                        }
-                    } else {
-                        if (!href.startsWith('html/') && href !== 'index.html' && !href.includes('/')) {
-                            newHref = 'html/' + href;
+                        } else {
+                            newHref = '../' + href;
                         }
                     }
                     link.setAttribute('href', newHref);
