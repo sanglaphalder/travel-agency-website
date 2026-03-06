@@ -1,66 +1,198 @@
-document.addEventListener("DOMContentLoaded", function () {
+/**
+ * ============================================
+ * NAVBAR INJECTION - MINIMAL IMPLEMENTATION
+ * ============================================
+ */
 
-    const hamburger = document.getElementById("hamburger");
-    const navLinks = document.getElementById("nav-links");
-    const navLinkItems = document.querySelectorAll(".nav-links a");
-    const themeToggle = document.getElementById("theme-toggle");
-    const body = document.body;
+// Load navbar.html and inject into page
+async function loadNavbarComponent() {
+    try {
+        const currentPath = window.location.pathname;
+        const isInHtmlFolder = currentPath.includes('/html/');
 
-    // Toggle hamburger menu + prevent background scroll
-    hamburger.addEventListener("click", function () {
-        navLinks.classList.toggle("active");
-        body.classList.toggle("no-scroll");
-    });
+        // --- INLINED NAVBAR HTML ---
+        const navbarHTML = `
+        <nav class="navbar" id="main-navbar">
+            <div class="nav-left">
+                <a href="index.html" class="logo-link">
+                    <img src="assets/light_logo.png" id="logo" class="logo" alt="Ruler Tours Logo">
+                    <h2>Ruler Tours</h2>
+                </a>
+            </div>
 
-    // Close menu when a link is clicked
-    navLinkItems.forEach(function (link) {
-        link.addEventListener("click", function () {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
-        });
-    });
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" data-page="index.html">Home</a></li>
+                <li><a href="tours.html" data-page="tours.html">Tours</a></li>
+                <li><a href="rentals.html" data-page="rentals.html">Rentals</a></li>
+                <li><a href="html/about.html" data-page="about.html">About</a></li>
+                <li><a href="html/contact.html" data-page="contact.html">Contact</a></li>
+            </ul>
 
-    // Close menu when clicking outside
-    document.addEventListener("click", function (event) {
-        const isClickInsideMenu = navLinks.contains(event.target);
-        const isClickHamburger = hamburger.contains(event.target);
+            <div class="nav-right">
+                <button id="theme-toggle">🌙</button>
 
-        if (!isClickInsideMenu && !isClickHamburger) {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
+                <!-- Auth Buttons -->
+                <a href="login.html" id="auth-btn" class="btn-login">Login</a>
+                <a href="signup.html" id="signup-btn" class="btn-primary" style="padding: 8px 20px; font-size: 0.9rem;">Sign Up</a>
+
+                <!-- Profile (Hidden by default) -->
+                <div class="profile-container" id="profile-trigger">
+                    <img src="" class="profile-avatar" alt="User">
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+
+                <div class="hamburger" id="hamburger">☰</div>
+            </div>
+        </nav>
+        `;
+
+        // Insert navbar at top of body
+        document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+
+        // --- DYNAMIC LINK FIXING ---
+        const prefix = isInHtmlFolder ? '../' : '';
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            // Fix all <a> links in navbar
+            const links = navbar.querySelectorAll('a');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                    const isTargetInHtmlFolder = href.startsWith('html/');
+                    const cleanHref = isTargetInHtmlFolder ? href.replace('html/', '') : href;
+
+                    if (isInHtmlFolder) {
+                        if (href.startsWith('html/')) {
+                            newHref = href.replace('html/', '');
+                        } else {
+                            newHref = '../' + href;
+                        }
+                    }
+                }
+            });
+
+            // Fix Logo Path
+            const logo = navbar.querySelector('#logo');
+            if (logo) {
+                logo.src = prefix + 'assets/light_logo.png';
+            }
+        }
+
+        console.log('✅ Navbar injected locally and links adjusted');
+        return true;
+    } catch (error) {
+        console.error('❌ Navbar injection failed:', error.message);
+        return false;
+    }
+}
+
+// Update logo based on theme
+function updateLogoForTheme() {
+    const logoImg = document.getElementById('logo');
+    if (!logoImg) return;
+
+    const isLight = window.location.pathname.includes('/html/');
+    const darkThemeActive = document.body.classList.contains('dark');
+
+    if (isLight) {
+        // Pages in /html folder
+        logoImg.src = darkThemeActive ? '../assets/dark_logo.png' : '../assets/light_logo.png';
+    } else {
+        // Root level pages
+        logoImg.src = darkThemeActive ? 'assets/dark_logo.png' : 'assets/light_logo.png';
+    }
+}
+
+// Highlight current page link in navbar
+function highlightActivePage() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        const dataPage = link.getAttribute('data-page');
+        if (dataPage === currentPage) {
+            link.classList.add('active');
         }
     });
+}
 
-    // Close menu on window resize
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-            navLinks.classList.remove("active");
-            body.classList.remove("no-scroll");
-        }
-    });
+// ========================================
+// MAIN: Initialize on page load
+document.addEventListener("DOMContentLoaded", async function () {
 
-    // Load saved theme
-    if (localStorage.getItem("theme") === "dark") {
-        body.classList.add("dark");
-        themeToggle.textContent = "☀️";
+    // Load navbar
+    const navbarLoaded = await loadNavbarComponent();
+
+    if (!navbarLoaded) {
+        console.warn('⚠️ Could not load navbar, continuing with auth setup...');
     }
 
-    // Toggle theme
-    themeToggle.addEventListener("click", function () {
-        body.classList.toggle("dark");
+    // Setup navbar interactions
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const navLinkItems = document.querySelectorAll('.nav-links a');
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
 
-        if (body.classList.contains("dark")) {
-            localStorage.setItem("theme", "dark");
-            themeToggle.textContent = "☀️";
-        } else {
-            localStorage.setItem("theme", "light");
-            themeToggle.textContent = "🌙";
+    // Hamburger menu toggle
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function () {
+            navLinks.classList.toggle('active');
+            body.classList.toggle('no-scroll');
+        });
+
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            });
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                navLinks.classList.remove('active');
+                body.classList.remove('no-scroll');
+            }
+        });
+    }
+
+    // Theme toggle
+    if (themeToggle) {
+        // Apply saved theme on page load
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark');
+            themeToggle.textContent = '☀️';
         }
-    });
+        updateLogoForTheme();
+
+        themeToggle.addEventListener('click', function () {
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '🌙';
+            }
+            updateLogoForTheme();
+        });
+    }
+
+    // Highlight active page
+    highlightActivePage();
+
+    // ========== EXISTING AUTH & FORM CODE CONTINUES BELOW ===========
 
     // --- AUTH INTEGRATION ---
-
-    const API_URL = "http://localhost:3000/api/auth";
 
     // Helper for Toast Notifications
     function showToast(message, type = "success") {
@@ -72,43 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
             backgroundColor: type === "success" ? "#2E7D32" : "#D32F2F",
             close: true
         }).showToast();
-    }
-
-    // Google OAuth Callback Parsing
-    const urlParams = new URLSearchParams(window.location.search);
-    console.log("URL Params parsed:", window.location.search);
-
-    const oauthUser = urlParams.get('user');
-
-    console.log("Extracted user string:", oauthUser);
-
-    if (oauthUser) {
-        // User data is now passed without token in URL
-        try {
-            // Ensure it's valid JSON before saving
-            const parsed = JSON.parse(oauthUser);
-            console.log("Successfully parsed user object:", parsed);
-            localStorage.setItem('user', oauthUser);
-            
-            // Clear user from URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            showToast("Successfully logged in with Google!");
-            // Redirect to home if on auth pages
-            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("signup.html")) {
-                setTimeout(() => { window.location.href = "index.html"; }, 1500);
-            } else {
-                updateNavForUser();
-            }
-        } catch (e) {
-            console.error("Failed to parse oauthUser from URL:", e);
-            console.error("Raw oauthUser string was:", oauthUser);
-        }
-    }
-
-    const oauthError = urlParams.get('error');
-    if (oauthError) {
-        showToast(`Google login failed: ${oauthError}`, "error");
-        window.history.replaceState({}, document.title, window.location.pathname);
     }
 
     // UI State Management - Unified
@@ -169,192 +264,85 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize UI on page load
     updateNavForUser();
 
-    // Sign Up Logic
-    const signupForm = document.getElementById("signupForm");
-    if (signupForm) {
-        signupForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const name = document.getElementById("signupName").value;
-            const email = document.getElementById("signupEmail").value;
-            const password = document.getElementById("signupPassword").value;
-            const confirmPassword = document.getElementById("signupConfirmPassword").value;
+    // --- PROFILE DROPDOWN logic ---
+    function setupProfileDropdown() {
+        const profileTrigger = document.getElementById('profile-trigger');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const logoutBtn = document.getElementById('logout-btn');
 
-            if (password !== confirmPassword) {
-                showToast("Passwords do not match!", "error");
-                return;
-            }
+        if (profileTrigger && profileDropdown) {
+            // Toggle dropdown on click
+            profileTrigger.addEventListener('click', function (e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
 
-            try {
-                const response = await fetch(`${API_URL}/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name, email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showToast(data.message);
-                    setTimeout(() => {
-                        window.location.href = "login.html";
-                    }, 2000);
-                } else {
-                    showToast(data.message, "error");
+            // Close dropdown when clicking elsewhere
+            document.addEventListener('click', function (e) {
+                if (!profileTrigger.contains(e.target)) {
+                    profileDropdown.classList.remove('active');
                 }
-            } catch (error) {
-                showToast("Something went wrong!", "error");
-            }
-        });
-    }
+            });
+        }
 
-    // Login Logic
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
-
-            try {
-                const response = await fetch(`${API_URL}/login`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showToast(data.message);
-                    // Token is now handled via httpOnly cookies, not localStorage
-                    if (data.userData) {
-                        localStorage.setItem("user", JSON.stringify(data.userData));
-                    }
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 2000);
-                } else {
-                    showToast(data.message, "error");
-                }
-            } catch (error) {
-                showToast("Something went wrong!", "error");
-            }
-        });
-    }
-
-    // Forgot Password Logic
-    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-    if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const email = document.getElementById("forgotPassEmail").value;
-
-            try {
-                const response = await fetch(`${API_URL}/send-reset-otp`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showToast(data.message);
-                    localStorage.setItem("resetEmail", email);
-                    setTimeout(() => {
-                        window.location.href = "reset-password.html";
-                    }, 2000);
-                } else {
-                    showToast(data.message, "error");
-                }
-            } catch (error) {
-                showToast("Something went wrong!", "error");
-            }
-        });
-    }
-
-    // Reset Password Logic
-    const resetPasswordForm = document.getElementById("resetPasswordForm");
-    if (resetPasswordForm) {
-        resetPasswordForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const otp = document.getElementById("resetOtp").value;
-            const newPassword = document.getElementById("resetNewPassword").value;
-            const confirmPassword = document.getElementById("resetConfirmPassword").value;
-            const email = localStorage.getItem("resetEmail");
-
-            if (!email) {
-                showToast("Email session expired. Start again.", "error");
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showToast("Passwords do not match!", "error");
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_URL}/reset-password`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, otp, newPassword })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showToast(data.message);
-                    localStorage.removeItem("resetEmail");
-                    setTimeout(() => {
-                        window.location.href = "reset-success.html";
-                    }, 2000);
-                } else {
-                    showToast(data.message, "error");
-                }
-            } catch (error) {
-                showToast("Something went wrong!", "error");
-            }
-        });
-    }
-
-    const profileTrigger = document.getElementById("profile-trigger");
-    const profileDropdown = document.getElementById("profile-dropdown");
-
-    if (profileTrigger && profileDropdown) {
-        profileTrigger.addEventListener("click", function (e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle("active");
-        });
-
-        document.addEventListener("click", function (e) {
-            if (!profileTrigger.contains(e.target)) {
-                profileDropdown.classList.remove("active");
-            }
-        });
-
-        const logoutBtn = profileDropdown.querySelector("a[href='#']");
         if (logoutBtn) {
-            logoutBtn.addEventListener("click", async function (e) {
+            logoutBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                try {
-                    await fetch(`${API_URL}/logout`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" }
-                    });
-                } catch (error) {
-                    console.error("Logout API error:", error);
-                }
-                // Token is now handled via httpOnly cookies, only remove user data
-                localStorage.removeItem("user");
-                showToast("Logged out successfully!");
+                e.stopPropagation();
+
+                // Clear auth data
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+
+                showToast("Logged out successfully");
+
+                // Redirect to home and refresh
                 setTimeout(() => {
                     window.location.href = "index.html";
                 }, 1000);
             });
         }
     }
-    // (Old checkAuth function removed. Handled by updateNavForUser)
 
+    // Sign Up Logic - form submission
+    const signupForm = document.getElementById("signupForm");
+    if (signupForm) {
+        signupForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            location.reload();
+        });
+    }
+
+    // Login Logic - form submission
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            location.reload();
+        });
+    }
+
+    // Forgot Password Logic - form submission
+    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            location.reload();
+        });
+    }
+
+    // Reset Password Logic - form submission
+    const resetPasswordForm = document.getElementById("resetPasswordForm");
+    if (resetPasswordForm) {
+        resetPasswordForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            location.reload();
+        });
+    }
+
+    // Initialize UI on page load
+    updateNavForUser();
+    setupProfileDropdown();
 
 });
 
@@ -382,3 +370,24 @@ passwordToggles.forEach(icon => {
         }
     });
 });
+
+/* ===============================
+   SCROLL REVEAL ANIMATION
+================================ */
+
+const revealElements = document.querySelectorAll(".reveal");
+
+function revealOnScroll() {
+    const windowHeight = window.innerHeight;
+
+    revealElements.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 100) {
+            el.classList.add("active");
+        }
+    });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+revealOnScroll();

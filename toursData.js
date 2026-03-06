@@ -217,6 +217,75 @@ const toursPackagesData = {
                 "River Walk",
                 "Photography"
             ]
+        },
+
+        {
+            "id": "darjeeling-007",
+            "title": "Darjeeling Himalayan Explorer",
+            "location": "Darjeeling, West Bengal",
+            "duration": "3 Days",
+            "timing": "5AM - 6PM",
+            "price": 10999,
+            "rating": 4.9,
+            "overview": "Experience the Queen of Hills with panoramic Kanchenjunga views, tea gardens, colonial charm and the famous toy train ride.",
+            "image": "assets/darjeeling.png",
+
+            "environment": {
+                "landscape": "Tea Gardens, Himalayan Peaks, Colonial Hill Town",
+                "crowdLevel": "Moderate",
+                "noiseLevel": "Moderate",
+                "airQuality": "Fresh Mountain Air"
+            },
+
+            "climate": {
+                "summer": "12°C - 22°C",
+                "winter": "2°C - 10°C",
+                "bestTimeToVisit": "October to May"
+            },
+
+            "accommodation": {
+                "roomType": "Premium Hill View Hotel",
+                "roomQuality": "Modern & Comfortable",
+                "bathroom": "Attached with Hot Water",
+                "wifi": "High Speed Available",
+                "view": "Kanchenjunga View"
+            },
+
+            "amenities": [
+                "Breakfast Included",
+                "Sightseeing Cab",
+                "Toy Train Experience",
+                "Bonfire Evening"
+            ],
+
+            "activities": [
+                "Tiger Hill Sunrise",
+                "Batasia Loop",
+                "Tea Garden Tour",
+                "Mall Road Walk",
+                "Himalayan Mountaineering Institute Visit"
+            ],
+
+            "food": {
+                "type": "Veg & Non-Veg",
+                "localSpeciality": "Darjeeling Tea, Momos, Thukpa",
+                "mealPlan": "Breakfast Included"
+            },
+
+            "transportation": {
+                "pickup": "NJP Railway Station / Bagdogra Airport",
+                "localTravel": "Private Cab",
+                "roadCondition": "Hilly but Well Maintained"
+            },
+
+            "safety": {
+                "medicalFacility": "Nearby Hospital Available",
+                "safeForFamily": true,
+                "safeForCouples": true
+            },
+
+            "cancellationPolicy": "Free cancellation up to 48 hours before departure.",
+            "contactSupport": "24x7 Customer Support Available"
         }
     ]
 };
