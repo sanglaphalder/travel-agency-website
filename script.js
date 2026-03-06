@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const signupBtn = document.getElementById("signup-btn");
         const profileCont = document.getElementById("profile-trigger");
 
-        const token = localStorage.getItem("token");
+        // Token is now handled via httpOnly cookies, check user data for auth state
         let user = null;
         try {
             const userStr = localStorage.getItem("user");
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             localStorage.removeItem("user"); // clear corrupted data
         }
 
-        if (token && user) {
+        if (user) {
             // Logged in state: Hide signup button, update authBtn to Logout, show profile
             if (signupBtn) signupBtn.style.display = "none";
 
