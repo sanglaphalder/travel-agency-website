@@ -312,7 +312,7 @@ body.dark .navbar {
 }
 
 .logo {
-    height: 42px;
+    height: 60px;
 }
 
 .logo-link {
@@ -1401,23 +1401,24 @@ body.modal-open {
 }
 
 
-.hero{
-    background:url("assets/hero-light.png") center/cover no-repeat;
+.hero {
+    background: url("assets/hero-light.png") center/cover no-repeat;
 }
 
 
 /* Default (Light Mode) */
-.hero{
+.hero {
     background-image:
-        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-        url("../assets/hero-light.png"); /* adjust path if needed */
-    background-position:center;
-    background-size:cover;
-    background-repeat:no-repeat;
+        linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+        url("../assets/hero-light.png");
+    /* adjust path if needed */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 /* Dark Mode — stronger overlay */
-body.dark .hero{
+body.dark .hero {
     background:
         linear-gradient(rgba(5, 15, 25, 0.75), rgba(5, 15, 25, 0.7)),
         url("assets/hero.png") center/cover no-repeat;

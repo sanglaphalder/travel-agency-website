@@ -75,7 +75,9 @@ async function loadNavbarComponent() {
             // Fix Logo Path
             const logo = navbar.querySelector('#logo');
             if (logo) {
-                logo.src = prefix + 'assets/light_logo.png';
+                // Initial logo based on current body class
+                const isDark = document.body.classList.contains('dark');
+                logo.src = prefix + (isDark ? 'assets/light_logo.png' : 'assets/dark_logo.png');
             }
         }
 
@@ -97,10 +99,10 @@ function updateLogoForTheme() {
 
     if (isLight) {
         // Pages in /html folder
-        logoImg.src = darkThemeActive ? '../assets/dark_logo.png' : '../assets/light_logo.png';
+        logoImg.src = darkThemeActive ? '../assets/light_logo.png' : '../assets/dark_logo.png';
     } else {
         // Root level pages
-        logoImg.src = darkThemeActive ? 'assets/dark_logo.png' : 'assets/light_logo.png';
+        logoImg.src = darkThemeActive ? 'assets/light_logo.png' : 'assets/dark_logo.png';
     }
 }
 
