@@ -106,7 +106,7 @@ body.dark .navbar {
 body.dark .page-hero {
     background:
         linear-gradient(rgba(5, 15, 25, 0.75), rgba(5, 15, 25, 0.7)),
-        url("assets/bg.png") center/cover no-repeat;
+        url("/assets/bg.png") center/cover no-repeat;
 }
 
 
@@ -405,7 +405,7 @@ body.dark .navbar {
     height: 100vh;
     background:
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.55)),
-        url("assets/hbg.png") center/cover no-repeat;
+        url("/assets/hbg.png") center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -438,7 +438,7 @@ body.dark .navbar {
     height: 40vh;
     background:
         linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.5)),
-        url("assets/bg.png") center/cover no-repeat;
+        url("/assets/bg.png") center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1402,7 +1402,7 @@ body.modal-open {
 
 
 .hero{
-    background:url("assets/hero-light.png") center/cover no-repeat;
+    background:url("/assets/hero-light.png") center/cover no-repeat;
 }
 
 
@@ -1410,7 +1410,7 @@ body.modal-open {
 .hero{
     background-image:
         linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-        url("../assets/hero-light.png"); /* adjust path if needed */
+        url("/assets/hero-light.png"); /* adjust path if needed */
     background-position:center;
     background-size:cover;
     background-repeat:no-repeat;
@@ -1420,5 +1420,5 @@ body.modal-open {
 body.dark .hero{
     background:
         linear-gradient(rgba(5, 15, 25, 0.75), rgba(5, 15, 25, 0.7)),
-        url("assets/hero.png") center/cover no-repeat;
+        url("/assets/hero.png") center/cover no-repeat;
 }
