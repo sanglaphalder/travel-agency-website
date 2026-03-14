@@ -1,5 +1,4 @@
 // Logic specific to the Vehicle Rental page
-console.log("Rental Logic Loaded");
 
 import {vehicleData} from "../db/rental-vehicle-data.js"
 

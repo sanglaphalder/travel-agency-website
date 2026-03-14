@@ -63,10 +63,8 @@ async function loadNavbarComponent() {
             }
         }
 
-        console.log('✅ Navbar injected locally and links adjusted');
         return true;
     } catch (error) {
-        console.error('❌ Navbar injection failed:', error.message);
         return false;
     }
 }
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const navbarLoaded = await loadNavbarComponent();
 
     if (!navbarLoaded) {
-        console.warn('⚠️ Could not load navbar, continuing with auth setup...');
+        // Navbar failed to load, but continue with auth setup
     }
 
     // Setup navbar interactions
@@ -203,7 +201,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 user = JSON.parse(userStr);
             }
         } catch (e) {
-            console.error("Error parsing user from localStorage:", e);
             localStorage.removeItem("user"); // clear corrupted data
         }
 
