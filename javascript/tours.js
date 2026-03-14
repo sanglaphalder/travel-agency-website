@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 <div class="modal-footer">
                     ${tour.cancellationPolicy ? `<p class="cancel-policy"><strong>Note:</strong> ${tour.cancellationPolicy}</p>` : ''}
-                    <button class="btn-primary" style="width:100%; margin-top:15px;">Book Now</button>
+                    <button class="btn-primary btn-full-width margin-top-md">Book Now</button>
                     ${tour.contactSupport ? `<p class="support-text"><i class="fas fa-headset"></i> ${tour.contactSupport}</p>` : ''}
                 </div>
             </div>
