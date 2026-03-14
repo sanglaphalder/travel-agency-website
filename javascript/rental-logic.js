@@ -1,5 +1,4 @@
 // Logic specific to the Vehicle Rental page
-console.log("Rental Logic Loaded");
 
 // HOOK: Create an array of vehicle objects and render them to the page
 const vehicleData = [

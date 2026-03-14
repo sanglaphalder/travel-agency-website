@@ -43,7 +43,6 @@ const googleCallback = async (req, res) => {
         const tokenData = await tokenResponse.json();
 
         if (!tokenResponse.ok) {
-            console.error('Google OAuth token error:', tokenData);
             const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5500';
             return res.redirect(`${frontendUrl}?error=oauth_token_failed`);
         }
@@ -55,7 +54,6 @@ const googleCallback = async (req, res) => {
 
         const userData = await userResponse.json();
         if (!userResponse.ok) {
-            console.error('Google OAuth user data error:', userData);
             const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5500';
             return res.redirect(`${frontendUrl}?error=oauth_userinfo_failed`);
         }
@@ -84,7 +82,6 @@ const googleCallback = async (req, res) => {
         res.redirect(`${frontendUrl}?user=${encodeURIComponent(userObj)}`);
 
     } catch (error) {
-        console.error('Google OAuth Callback Error:', error);
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5500';
         res.redirect(`${frontendUrl}?error=oauth_server_error`);
     }
