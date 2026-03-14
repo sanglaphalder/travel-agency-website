@@ -8,7 +8,6 @@
 async function loadNavbarComponent() {
     try {
         const currentPath = window.location.pathname;
-        const isInHtmlFolder = currentPath.includes('/html/');
 
         // --- INLINED NAVBAR HTML ---
         const navbarHTML = `
@@ -24,8 +23,7 @@ async function loadNavbarComponent() {
                 <li><a href="index.html" data-page="index.html">Home</a></li>
                 <li><a href="tours.html" data-page="tours.html">Tours</a></li>
                 <li><a href="rentals.html" data-page="rentals.html">Rentals</a></li>
-                <li><a href="html/about.html" data-page="about.html">About</a></li>
-                <li><a href="html/contact.html" data-page="contact.html">Contact</a></li>
+                <li><a href="about.html" data-page="about.html">About</a></li>
             </ul>
 
             <div class="nav-right">
@@ -52,31 +50,16 @@ async function loadNavbarComponent() {
         document.body.insertAdjacentHTML('afterbegin', navbarHTML);
 
         // --- DYNAMIC LINK FIXING ---
+        const isInHtmlFolder = window.location.pathname.includes('/html/');
         const prefix = isInHtmlFolder ? '../' : '';
         const navbar = document.querySelector('.navbar');
         if (navbar) {
-            // Fix all <a> links in navbar
-            const links = navbar.querySelectorAll('a');
-            links.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && !href.startsWith('http') && !href.startsWith('#')) {
-                    const isTargetInHtmlFolder = href.startsWith('html/');
-                    const cleanHref = isTargetInHtmlFolder ? href.replace('html/', '') : href;
-
-                    if (isInHtmlFolder) {
-                        if (href.startsWith('html/')) {
-                            newHref = href.replace('html/', '');
-                        } else {
-                            newHref = '../' + href;
-                        }
-                    }
-                }
-            });
-
             // Fix Logo Path
             const logo = navbar.querySelector('#logo');
             if (logo) {
-                logo.src = prefix + 'assets/light_logo.png';
+                // Initial logo based on current body class
+                const isDark = document.body.classList.contains('dark');
+                logo.src = prefix + (isDark ? 'assets/light_logo.png' : 'assets/dark_logo.png');
             }
         }
 
@@ -91,15 +74,15 @@ function updateLogoForTheme() {
     const logoImg = document.getElementById('logo');
     if (!logoImg) return;
 
-    const isLight = window.location.pathname.includes('/html/');
+    const isLightPage = window.location.pathname.includes('/html/');
     const darkThemeActive = document.body.classList.contains('dark');
 
-    if (isLight) {
+    if (isLightPage) {
         // Pages in /html folder
-        logoImg.src = darkThemeActive ? '../assets/dark_logo.png' : '../assets/light_logo.png';
+        logoImg.src = darkThemeActive ? '../assets/light_logo.png' : '../assets/dark_logo.png';
     } else {
         // Root level pages
-        logoImg.src = darkThemeActive ? 'assets/dark_logo.png' : 'assets/light_logo.png';
+        logoImg.src = darkThemeActive ? 'assets/light_logo.png' : 'assets/dark_logo.png';
     }
 }
 

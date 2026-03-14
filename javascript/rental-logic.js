@@ -1,9 +1,42 @@
 // Logic specific to the Vehicle Rental page
 
-// HOOK: Create an array of vehicle objects and render them to the page
-const vehicleData = [
-    { name: "Luxury SUV", price: 100 },
-    { name: "Sport Bike", price: 50 }
-];
+import {vehicleData} from "/db/rental-vehicle-data.js"
 
-// HOOK: Write a function to display these vehicles in html/rentals.html
+// console.log(vehicleData);
+
+const luxuryCruisersContainer = document.querySelector("#luxury-cruisers")
+const bikeRentalsContainer = document.querySelector("#bike-rentals")
+
+vehicleData.map((item) => {
+    if (item.type === "Luxury Cruisers") {
+        const htmlString = `
+            <img src="${item.srcImg}">
+            <h3>${item.name}</h3>
+            <p>${item.seats} Seater</p>
+            <p>Fare: ₹${item.farePerDay}/day</p>
+            <p>Timing: ${item.timing}</p>
+            <button class="btn-primary">Book Now</button>
+            `;
+         const child = document.createElement("div");
+         child.classList.add("card");
+         child.innerHTML = htmlString;
+         luxuryCruisersContainer.appendChild(child);
+    }
+    else if (item.type === "Bike Rentals") {
+        const htmlString = `
+            <img src="${item.srcImg}">
+            <h3>${item.name}</h3>
+            <p>${item.seats} Seater</p>
+            <p>Fare: ₹${item.farePerDay}/day</p>
+            <p>Timing: ${item.timing}</p>
+            <button class="btn-primary">Book Now</button>
+            `;
+        const child = document.createElement("div");
+        child.classList.add("card");
+        child.innerHTML = htmlString;
+        bikeRentalsContainer.appendChild(child);
+    }
+    else {
+        console.log("Invalid Type")
+    }
+})
