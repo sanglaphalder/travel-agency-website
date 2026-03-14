@@ -19,9 +19,7 @@ Root Variables
 .footer {
     background-color: var(--footer-bg);
     color: var(--text-secondary);
-    padding: 70px 0 50px;
-
-
+    padding: 50px 20px 40px;
     font-family: 'Inter', system-ui, sans-serif;
     border-top: 1px solid var(--footer-border);
 }
@@ -38,17 +36,17 @@ Root Variables
 }
 
 /* ================================
-  Container 
+  Container - Mobile First Approach
 ================================ */
 .footer-container {
     max-width: 1140px;
     margin: 0 auto;
     padding: 0 25px;
-
-    display: grid;
-grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
-    gap: 55px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 45px;
 }
 
 /* ================================
@@ -57,8 +55,8 @@ Brand Section
 .footer-brand {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    width: 100%;
 }
 
 .footer h2,
@@ -73,14 +71,14 @@ Brand Section
     letter-spacing: -0.5px;
     margin-bottom: 20px;
     text-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
-
 }
 
 .footer-brand p {
     font-size: 14.5px;
     line-height: 1.7;
     color: var(--text-muted);
-    max-width: 280px;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 /* ================================
@@ -88,8 +86,9 @@ Brand Section
 ================================ */
 .footer-social {
     display: flex;
+    justify-content: center;
     gap: 12px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .footer-social a {
@@ -98,17 +97,13 @@ Brand Section
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid var(--footer-border);
     border-radius: 8px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     color: var(--text-secondary);
     transition: var(--transition);
 }
-.footer-contact p:hover {
-    color: var(--text-secondary);
-}
+
 .footer-social a:hover {
     background: var(--accent);
     color: #ffffff;
@@ -130,8 +125,25 @@ Brand Section
 }
 
 /* ================================
+    Links & Contact Sections
+================================ */
+.footer-links,
+.footer-contact {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ================================
     Links 
 ================================ */
+.footer-links ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .footer-links li {
     margin-bottom: 15px;
 }
@@ -167,12 +179,14 @@ Brand Section
 ================================ */
 .footer-contact p {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 20px;
     font-size: 14px;
     color: var(--text-muted);
-     transition: var(--transition);
+    transition: var(--transition);
+    width: 100%;
 }
 
 .footer-contact i {
@@ -187,7 +201,7 @@ Brand Section
 ================================ */
 .footer-bottom {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 50px;
     padding-top: 30px;
     border-top: 1px solid var(--footer-border);
     font-size: 12px;
@@ -203,93 +217,103 @@ Brand Section
     outline-offset: 3px;
 }
 
-
 /* ================================
-    Responsive 
+    Responsive Design - Tablet (768px and up)
 ================================ */
+@media (min-width: 768px) {
+    .footer {
+        padding: 70px 0 50px;
+    }
 
-@media (min-width: 768px) and (max-width: 1024px) {
     .footer-container {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important; 
-        gap: 60px 80px !important; 
-        max-width: 900px !important; 
-        margin: 0 auto !important;
-        padding: 0 20px !important;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+        gap: 55px;
+        align-items: start;
+        text-align: left;
+        padding: 0 25px;
     }
 
     .footer-brand {
-        
-        flex: 0 0 100% !important;
-        text-align: center !important;
-        align-items: center !important;
-        margin-bottom: 20px !important;
+        align-items: flex-start;
+        text-align: left;
+        width: auto;
     }
 
     .footer-brand p {
-        max-width: 450px !important;
-        margin: 0 auto !important;
+        max-width: 280px;
+        margin: 0;
     }
 
-    .footer-social {
-        justify-content: center !important;
-    }
-
-    .footer-links, .footer-contact {
-        flex: 0 0 auto !important; 
-        min-width: 180px !important;
-        text-align: left !important;
-    }
-
-    .footer h3 {
-        text-align: left !important;
-    }
-}
-
-@media (max-width: 767px) {
-    .footer {
-        padding: 50px 20px 40px !important;
-    }
-
-    .footer-container {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
-        gap: 45px !important;
-    }
-
-    .footer-brand, 
-    .footer-links, 
+    .footer-links,
     .footer-contact {
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .footer-brand p {
-        margin: 0 auto !important;
-        max-width: 320px;
-    }
-
-    .footer-social {
-        justify-content: center !important;
-        margin-top: 20px !important;
-    }
-
-    .footer-contact p {
-        justify-content: center !important;
-        display: flex !important;
-        gap: 10px;
-        width: 100% !important;
+        align-items: flex-start;
+        width: auto;
     }
 
     .footer-links ul {
-        display: flex;
+        align-items: flex-start;
         flex-direction: column;
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        text-align: left;
+    }
+
+    .footer-social {
+        justify-content: flex-start;
+        margin-top: 30px;
+    }
+
+    .footer-contact p {
+        justify-content: flex-start;
+        width: auto;
+    }
+}
+
+/* ================================
+    Responsive Design - Tablet Only (768px to 1024px)
+================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 60px 80px;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+
+    .footer-brand {
+        flex: 0 0 100%;
+        text-align: center;
         align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .footer-brand p {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+
+    .footer-links,
+    .footer-contact {
+        flex: 0 0 auto;
+        min-width: 180px;
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .footer-links ul {
+        align-items: flex-start;
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        text-align: left;
     }
 }
