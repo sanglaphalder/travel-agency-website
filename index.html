@@ -131,29 +131,27 @@
         </div>
       </div>
 
-      <div style="flex: 1; min-width: 300px;">
+      <div class="flex-fill-lg">
         <h4>Send an Inquiry</h4>
         <form method="POST" id="contactFormFooter">
-          <div class="form-group" style="margin-bottom: 10px;">
+          <div class="form-group form-group-sm-margin">
             <input name="name" type="text" placeholder="Your Name" required
-              style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;" />
+              class="form-input-full" />
           </div>
-          <div class="form-group" style="margin-bottom: 10px;">
+          <div class="form-group form-group-sm-margin">
             <input name="email" type="email" placeholder="Your Email" required
-              style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;" />
+              class="form-input-full" />
           </div>
-          <div class="form-group" style="margin-bottom: 10px;">
+          <div class="form-group form-group-sm-margin">
             <textarea name="message" rows="3" placeholder="Tell us about your trip..." required
-              style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; resize: none;"></textarea>
+              class="form-textarea-full"></textarea>
           </div>
-          <button type="submit" class="btn-primary"
-            style="padding: 10px 25px; font-weight: 700; background: var(--accent); color: white; border: none; border-radius: 30px; cursor: pointer;">Send
+          <button type="submit" class="btn-primary btn-with-padding btn-bold">Send
             Message</button>
         </form>
-        <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-          <p style="font-size: 0.9rem; margin-bottom: 10px; opacity: 0.8;">Prefer a detailed inquiry?</p>
-          <a href="contact.html" class="btn-primary"
-            style="display: inline-block; background: transparent; border: 1px solid white; color: white;">Visit Contact
+        <div class="inquiry-box">
+          <p class="text-muted-sm">Prefer a detailed inquiry?</p>
+          <a href="contact.html" class="btn-primary btn-outline-white">Visit Contact
             Page</a>
         </div>
       </div>

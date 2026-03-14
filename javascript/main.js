@@ -23,13 +23,13 @@ function renderTours() {
         card.style.backgroundColor = "#fff";
 
         card.innerHTML = `
-            <h3 style="margin-top:0;">${tour.name}</h3>
-            <p style="color: #666;">${tour.description}</p>
+            <h3 class="card-title">${tour.name}</h3>
+            <p class="card-description">${tour.description}</p>
             <p><strong>Price:</strong> ${tour.price}</p>
             <div class="tags">
-                ${tour.tags.map(tag => `<span style="background:#f0f0f0; padding:4px 10px; border-radius:20px; font-size:12px;">${tag}</span>`).join('')}
+                ${tour.tags.map(tag => `<span class="badge-light">${tag}</span>`).join('')}
             </div>
-            <a href="package.html?id=${tour.id}" style="margin-top:15px; display:inline-block; font-weight:bold; color:black;">Explore Package →</a>
+            <a href="package.html?id=${tour.id}" class="card-link">Explore Package →</a>
         `;
 
         grid.appendChild(card);
