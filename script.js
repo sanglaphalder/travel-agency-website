@@ -29,21 +29,21 @@ async function loadNavbarComponent() {
             </ul>
 
             <div class="nav-right">
-                <button id="theme-toggle">🌙</button>
+                <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
 
                 <!-- Auth Buttons -->
                 <a href="login.html" id="auth-btn" class="btn-login">Login</a>
                 <a href="signup.html" id="signup-btn" class="btn-primary btn-small">Sign Up</a>
 
                 <!-- Profile (Hidden by default) -->
-                <div class="profile-container" id="profile-trigger">
+                <div class="profile-container" id="profile-trigger" role="button" aria-haspopup="true" aria-expanded="false" aria-label="User profile menu" tabindex="0">
                     <img src="" class="profile-avatar" alt="User">
-                    <div class="profile-dropdown" id="profile-dropdown">
-                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <div class="profile-dropdown" id="profile-dropdown" role="menu">
+                        <a href="#" id="logout-btn" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
 
-                <div class="hamburger" id="hamburger">☰</div>
+                <div class="hamburger" id="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">☰</div>
             </div>
         </nav>
         `;
@@ -136,15 +136,30 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Hamburger menu toggle
     if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function () {
+        // Helper to toggle hamburger state
+        function toggleHamburgerMenu() {
+            const isExpanded = navLinks.classList.contains('active');
             navLinks.classList.toggle('active');
             body.classList.toggle('no-scroll');
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+        }
+
+        // Click handler
+        hamburger.addEventListener('click', toggleHamburgerMenu);
+
+        // Keyboard handler for Enter and Space
+        hamburger.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleHamburgerMenu();
+            }
         });
 
         navLinkItems.forEach(link => {
             link.addEventListener('click', function () {
                 navLinks.classList.remove('active');
                 body.classList.remove('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
             });
         });
 
@@ -152,6 +167,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
                 navLinks.classList.remove('active');
                 body.classList.remove('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
             }
         });
 
@@ -159,6 +175,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (window.innerWidth > 768) {
                 navLinks.classList.remove('active');
                 body.classList.remove('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
             }
         });
     }
@@ -274,16 +291,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         const logoutBtn = document.getElementById('logout-btn');
 
         if (profileTrigger && profileDropdown) {
+            // Helper to toggle profile dropdown
+            function toggleProfileDropdown() {
+                const isExpanded = profileDropdown.classList.contains('active');
+                profileDropdown.classList.toggle('active');
+                profileTrigger.setAttribute('aria-expanded', !isExpanded);
+            }
+
             // Toggle dropdown on click
             profileTrigger.addEventListener('click', function (e) {
                 e.stopPropagation();
-                profileDropdown.classList.toggle('active');
+                toggleProfileDropdown();
+            });
+
+            // Keyboard handler for Enter and Space
+            profileTrigger.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleProfileDropdown();
+                }
             });
 
             // Close dropdown when clicking elsewhere
             document.addEventListener('click', function (e) {
                 if (!profileTrigger.contains(e.target)) {
                     profileDropdown.classList.remove('active');
+                    profileTrigger.setAttribute('aria-expanded', 'false');
                 }
             });
         }
