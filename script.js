@@ -60,16 +60,19 @@ async function loadNavbarComponent() {
             links.forEach(link => {
                 const href = link.getAttribute('href');
                 if (href && !href.startsWith('http') && !href.startsWith('#')) {
-                    const isTargetInHtmlFolder = href.startsWith('html/');
-                    const cleanHref = isTargetInHtmlFolder ? href.replace('html/', '') : href;
-
+                    let newHref = href;
                     if (isInHtmlFolder) {
                         if (href.startsWith('html/')) {
                             newHref = href.replace('html/', '');
                         } else {
                             newHref = '../' + href;
                         }
+                    } else {
+                        if (href.startsWith('html/')) {
+                            newHref = 'html/' + href.replace('html/', '');
+                        }
                     }
+                    link.setAttribute('href', newHref);
                 }
             });
 
