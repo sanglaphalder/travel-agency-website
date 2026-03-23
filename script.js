@@ -194,14 +194,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Helper for Toast Notifications
     function showToast(message, type = "success") {
-        Toastify({
-            text: message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: type === "success" ? "#2E7D32" : "#D32F2F",
-            close: true
-        }).showToast();
+        if (typeof Toastify !== 'undefined') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === "success" ? "#2E7D32" : "#D32F2F",
+                close: true
+            }).showToast();
+        } else {
+            // Fallback: native alert or console
+            console.log(`${type.toUpperCase()}: ${message}`);
+            alert(message); // Simple fallback
+        }
     }
 
     // UI State Management - Unified
