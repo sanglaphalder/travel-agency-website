@@ -1,21 +1,16 @@
 /**
  * javascript/script.js
- * Ruler Tours — Shared JavaScript
- * Handles: Navbar injection, theme toggle, mobile menu,
- *          auth forms, contact form, scroll reveal, toast
+ * Ruler Tours — All shared JS
+ * Navbar injection · Footer · Theme (logo swap) · Mobile menu
+ * Scroll effects · Reveal · Toast · Auth forms · Contact · Modals
  */
 
 /* ============================================================
    NAVBAR INJECTION
    ============================================================ */
-
 function buildNavbar() {
     const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-
-    // Determine relative prefix based on current file location
-    // Pages in root: no prefix. Pages in sub-folder: '../'
-    // All our pages are in root, so prefix = ''
-    const prefix = '';
+    const isAuthPage  = ['login.html', 'signup.html'].includes(currentFile);
 
     const pages = [
         { href: 'index.html',   label: 'Home' },
@@ -27,26 +22,31 @@ function buildNavbar() {
 
     const navLinksHTML = pages.map(p => {
         const active = currentFile === p.href ? 'active' : '';
-        return `<li><a href="${prefix}${p.href}" class="${active}">${p.label}</a></li>`;
+        return `<li><a href="${p.href}" class="${active}">${p.label}</a></li>`;
     }).join('');
 
     const mobileLinksHTML = pages.map(p => {
         const active = currentFile === p.href ? 'active' : '';
-        return `<a href="${prefix}${p.href}" class="${active}">${p.label}</a>`;
+        return `<a href="${p.href}" class="${active}">${p.label}</a>`;
     }).join('');
-
-    const isAuthPage = ['login.html', 'signup.html'].includes(currentFile);
 
     const navbarHTML = `
     <nav class="navbar" id="main-navbar">
         <div class="container">
-            <a href="${prefix}index.html" class="nav-brand">
-                <img src="${prefix}assets/logo.png" alt="Ruler Tours Logo" 
-                     onerror="this.style.display='none'">
-                <div class="nav-brand-text">
-                    <span class="nav-brand-name">Ruler Tours</span>
-                    <span class="nav-brand-tagline">We Burn Fuel, You Make Memories</span>
-                </div>
+            <a href="index.html" class="nav-brand">
+                <img
+                    src="assets/light_logo.png"
+                    alt="Ruler Tours"
+                    class="nav-logo nav-logo-light"
+                    onerror="this.style.display='none'"
+                >
+                <img
+                    src="assets/dark_logo.png"
+                    alt="Ruler Tours"
+                    class="nav-logo nav-logo-dark"
+                    onerror="this.style.display='none'"
+                >
+                <span class="nav-brand-name">Ruler Tours</span>
             </a>
 
             <ul class="nav-links">
@@ -54,35 +54,33 @@ function buildNavbar() {
             </ul>
 
             <div class="nav-right">
-                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
                     🌙
                 </button>
                 ${!isAuthPage ? `
-                <a href="${prefix}login.html" class="btn-login">Login</a>
-                <a href="${prefix}signup.html" class="btn-signup">Sign Up</a>
+                <a href="login.html"  class="btn-login">Login</a>
+                <a href="signup.html" class="btn-signup">Sign Up</a>
                 ` : ''}
             </div>
 
-            <button class="hamburger" id="hamburger" aria-label="Open menu">
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <nav class="mobile-nav" id="mobileNav">
+    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
         ${mobileLinksHTML}
         ${!isAuthPage ? `
         <hr class="mobile-nav-divider">
         <div class="mobile-nav-btns">
-            <a href="${prefix}login.html" class="btn-login">Login</a>
-            <a href="${prefix}signup.html" class="btn-signup">Sign Up</a>
+            <a href="login.html"  class="btn-login">Login</a>
+            <a href="signup.html" class="btn-signup">Sign Up</a>
         </div>
         ` : ''}
     </nav>
     `;
 
-    // Inject at top of body
     document.body.insertAdjacentHTML('afterbegin', navbarHTML);
 }
 
@@ -90,19 +88,18 @@ function buildNavbar() {
 /* ============================================================
    FOOTER INJECTION
    ============================================================ */
-
 function buildFooter() {
     const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-    const isAuthPage  = ['login.html', 'signup.html'].includes(currentFile);
-    if (isAuthPage) return; // No footer on auth pages
+    if (['login.html', 'signup.html'].includes(currentFile)) return;
 
     const footerHTML = `
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
-                <!-- Brand -->
                 <div>
-                    <div class="footer-brand-name">👑 Ruler Tours</div>
+                    <img src="assets/light_logo.png" alt="Ruler Tours" class="footer-logo footer-logo-light" onerror="this.style.display='none'">
+                    <img src="assets/dark_logo.png"  alt="Ruler Tours" class="footer-logo footer-logo-dark"  onerror="this.style.display='none'">
+                    <div class="footer-brand-name">Ruler Tours</div>
                     <div class="footer-tagline">"We Burn Fuel, You Make Memories"</div>
                     <p class="footer-desc">
                         Budget-friendly, curated travel experiences across North Bengal —
@@ -115,8 +112,6 @@ function buildFooter() {
                         <a class="footer-social-link" href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-
-                <!-- Quick Links -->
                 <div>
                     <div class="footer-col-title">Explore</div>
                     <div class="footer-links">
@@ -127,42 +122,25 @@ function buildFooter() {
                         <a href="contact.html">Contact</a>
                     </div>
                 </div>
-
-                <!-- Destinations -->
                 <div>
                     <div class="footer-col-title">Destinations</div>
                     <div class="footer-links">
                         <a href="tours.html">Darjeeling</a>
                         <a href="tours.html">Kurseong</a>
-                        <a href="tours.html">Lava & Loleygaon</a>
-                        <a href="tours.html">Dooars & Jaldapara</a>
+                        <a href="tours.html">Lava &amp; Loleygaon</a>
+                        <a href="tours.html">Dooars &amp; Jaldapara</a>
                         <a href="tours.html">Kalimpong</a>
                         <a href="tours.html">Sittong (Offbeat)</a>
                     </div>
                 </div>
-
-                <!-- Contact -->
                 <div>
                     <div class="footer-col-title">Contact Us</div>
-                    <div class="footer-contact-item">
-                        <i class="fas fa-phone"></i>
-                        +91 98765 43210
-                    </div>
-                    <div class="footer-contact-item">
-                        <i class="fas fa-envelope"></i>
-                        contact@rulertours.com
-                    </div>
-                    <div class="footer-contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        Siliguri, West Bengal, India
-                    </div>
-                    <div class="footer-contact-item">
-                        <i class="far fa-clock"></i>
-                        Mon–Sat: 9AM – 7PM
-                    </div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i>+91 98765 43210</div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i>contact@rulertours.com</div>
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i>Siliguri, West Bengal, India</div>
+                    <div class="footer-contact-item"><i class="far fa-clock"></i>Mon–Sat: 9AM – 7PM</div>
                 </div>
             </div>
-
             <div class="footer-bottom">
                 <p class="footer-copyright">© 2026 Ruler Tours. All rights reserved.</p>
                 <div class="footer-bottom-links">
@@ -180,9 +158,8 @@ function buildFooter() {
 
 
 /* ============================================================
-   THEME
+   THEME  (light / dark + logo swap)
    ============================================================ */
-
 function initTheme() {
     const saved = localStorage.getItem('rt-theme') || 'light';
     if (saved === 'dark') document.body.classList.add('dark');
@@ -197,42 +174,65 @@ function updateThemeBtn() {
 
 function toggleTheme() {
     document.body.classList.toggle('dark');
-    localStorage.setItem('rt-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('rt-theme', isDark ? 'dark' : 'light');
     updateThemeBtn();
+}
+
+
+/* ============================================================
+   SCROLL — glassmorphism navbar on scroll
+   ============================================================ */
+function initScrollEffects() {
+    const navbar = document.getElementById('main-navbar');
+    if (!navbar) return;
+
+    function onScroll() {
+        if (window.scrollY > 40) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // run once on load
 }
 
 
 /* ============================================================
    HAMBURGER / MOBILE MENU
    ============================================================ */
-
 function initMobileMenu() {
     const hamburger = document.getElementById('hamburger');
     const mobileNav = document.getElementById('mobileNav');
     if (!hamburger || !mobileNav) return;
 
-    hamburger.addEventListener('click', () => {
-        const isOpen = mobileNav.classList.toggle('open');
-        hamburger.classList.toggle('open', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
+    function setMenu(open) {
+        hamburger.classList.toggle('open', open);
+        mobileNav.classList.toggle('open', open);
+        hamburger.setAttribute('aria-expanded', String(open));
+        mobileNav.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setMenu(!mobileNav.classList.contains('open'));
     });
 
-    // Close on link click
     mobileNav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-            mobileNav.classList.remove('open');
-            hamburger.classList.remove('open');
-            document.body.style.overflow = '';
-        });
+        a.addEventListener('click', () => setMenu(false));
     });
 
-    // Close on outside click
-    document.addEventListener('click', e => {
+    document.addEventListener('click', (e) => {
         if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
-            mobileNav.classList.remove('open');
-            hamburger.classList.remove('open');
-            document.body.style.overflow = '';
+            setMenu(false);
         }
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 860) setMenu(false);
     });
 }
 
@@ -240,28 +240,26 @@ function initMobileMenu() {
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-
 function initReveal() {
-    const els = document.querySelectorAll('.reveal');
+    const els = document.querySelectorAll('.reveal:not(.visible)');
     if (!els.length) return;
 
     const obs = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('visible'), i * 70);
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
                 obs.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
 
     els.forEach(el => obs.observe(el));
 }
 
 
 /* ============================================================
-   TOAST NOTIFICATIONS
+   TOAST
    ============================================================ */
-
 function showToast(message, type = 'success') {
     let toast = document.getElementById('rt-toast');
     if (!toast) {
@@ -270,42 +268,37 @@ function showToast(message, type = 'success') {
         toast.className = 'toast';
         document.body.appendChild(toast);
     }
-
     const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
     toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
     toast.classList.add('show');
-
     clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 3600);
 }
 
 
 /* ============================================================
    PASSWORD TOGGLE
    ============================================================ */
-
 function initPasswordToggles() {
     document.querySelectorAll('.auth-toggle-pw').forEach(btn => {
         btn.addEventListener('click', function () {
-            const input = this.closest('.auth-input-wrap').querySelector('.auth-input');
+            const input = this.closest('.auth-input-wrap')?.querySelector('.auth-input');
             if (!input) return;
-            const isText = input.type === 'text';
-            input.type = isText ? 'password' : 'text';
-            this.innerHTML = isText
-                ? '<i class="fas fa-eye"></i>'
-                : '<i class="fas fa-eye-slash"></i>';
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            this.innerHTML = show
+                ? '<i class="fas fa-eye-slash"></i>'
+                : '<i class="fas fa-eye"></i>';
         });
     });
 }
 
 
 /* ============================================================
-   AUTH FORMS (Frontend only — no backend)
+   AUTH FORMS  (frontend only)
    ============================================================ */
-
 function initAuthForms() {
-    // Login
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', e => {
@@ -315,14 +308,13 @@ function initAuthForms() {
         });
     }
 
-    // Signup
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
         signupForm.addEventListener('submit', e => {
             e.preventDefault();
-            const pw  = document.getElementById('signupPw')?.value || '';
+            const pw  = document.getElementById('signupPw')?.value  || '';
             const cpw = document.getElementById('signupCpw')?.value || '';
-            if (pw !== cpw) {
+            if (pw && cpw && pw !== cpw) {
                 showToast('Passwords do not match.', 'error');
                 return;
             }
@@ -336,7 +328,6 @@ function initAuthForms() {
 /* ============================================================
    CONTACT FORM
    ============================================================ */
-
 function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -345,16 +336,16 @@ function initContactForm() {
         e.preventDefault();
         const success = document.getElementById('cfSuccess');
         if (success) success.classList.add('show');
-        form.querySelector('[type="submit"]').style.display = 'none';
-        showToast('Message sent! We\'ll reply within 24 hours.');
+        const btn = form.querySelector('[type="submit"]');
+        if (btn) btn.style.display = 'none';
+        showToast('Message sent! We\'ll reply within 4 hours.');
     });
 }
 
 
 /* ============================================================
-   MODAL (Generic)
+   MODAL HELPERS
    ============================================================ */
-
 function openModal(id) {
     const backdrop = document.getElementById(id);
     if (!backdrop) return;
@@ -370,54 +361,58 @@ function closeModal(id) {
 }
 
 function initModals() {
-    // Close on backdrop click
     document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
         backdrop.addEventListener('click', e => {
             if (e.target === backdrop) closeModal(backdrop.id);
         });
     });
-
-    // Close button
     document.querySelectorAll('.modal-close').forEach(btn => {
         btn.addEventListener('click', () => {
-            const backdrop = btn.closest('.modal-backdrop');
-            if (backdrop) closeModal(backdrop.id);
+            const b = btn.closest('.modal-backdrop');
+            if (b) closeModal(b.id);
         });
+    });
+    // ESC key
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-backdrop.open').forEach(b => closeModal(b.id));
+        }
     });
 }
 
 
 /* ============================================================
-   INIT — runs on every page
+   INIT
    ============================================================ */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Apply saved theme BEFORE building navbar (prevents flash)
+    // 1. Theme first (avoid flash)
     initTheme();
 
-    // 2. Build navbar & footer
+    // 2. Inject navbar + footer
     buildNavbar();
     buildFooter();
 
-    // 3. Wire up theme toggle (injected by buildNavbar)
+    // 3. Wire theme toggle
     const themeBtn = document.getElementById('themeToggle');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
-    // 4. Mobile menu
+    // 4. Scroll glassmorphism
+    initScrollEffects();
+
+    // 5. Mobile menu
     initMobileMenu();
 
-    // 5. Scroll reveal
+    // 6. Scroll reveal
     initReveal();
-    window.addEventListener('scroll', initReveal, { passive: true });
 
-    // 6. Auth forms
+    // 7. Auth
     initAuthForms();
     initPasswordToggles();
 
-    // 7. Contact form
+    // 8. Contact
     initContactForm();
 
-    // 8. Modals
+    // 9. Modals
     initModals();
 });
