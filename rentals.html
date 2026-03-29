@@ -1,77 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruler Tours</title>
-    <link rel="icon" type="image/png" href="assets/light_logo.png" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="javascript/auth-guard.js"></script>
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Rentals — Ruler Tours</title>
+    <meta name="description" content="Affordable car and bike rentals in North Bengal. Mahindra Bolero, Toyota Innova, Royal Enfield and more.">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
 
-  <body>
-    
-    <!-- Scroll to top button -->
-    <button id="scrollTopBtn">⬆</button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+    <!-- Navbar injected by script.js -->
+
+    <!-- Page Hero -->
     <section class="page-hero">
-      <h1>Premium Fleet Rentals</h1>
+        <div class="container">
+            <nav class="breadcrumb"><a href="index.html">Home</a> &rsaquo; Rentals</nav>
+            <h1><i class="fas fa-car" style="margin-right:10px;opacity:0.8;"></i>Vehicle Rentals</h1>
+            <p>Cars &amp; bikes for every route — mountain roads to city transfers</p>
+        </div>
     </section>
 
-    <div class="rental-cards">
-      <section class="section">
-        <h2>Luxury Cruisers</h2>
-      </section>
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
 
-      <section class="card-container" id="luxury-cruisers">
-        <!-- rendered from js -->
-      </section>
+            <!-- Info Banner -->
+            <div class="rental-info-banner reveal">
+                <i class="fas fa-info-circle"></i>
+                <p>
+                    <strong>All rentals include an experienced local driver</strong> familiar with North Bengal's mountain roads.
+                    Prices are per day. Call us at <strong>+91 98765 43210</strong> for custom packages, multi-day discounts,
+                    or group bookings. Bikes are self-ride (valid DL required).
+                </p>
+            </div>
 
-      <section class="section">
-        <h2>Bike Rentals</h2>
-      </section>
+            <!-- CAR RENTALS -->
+            <div class="rental-section-header reveal">
+                <span class="rental-section-icon">🚗</span>
+                <h2>Car Rentals</h2>
+            </div>
 
-      <section class="card-container" id="bike-rentals">
-        <!-- rendered from js -->
-      </section>
-    </div>
+            <div class="rentals-grid" id="carGrid"></div>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div>
-          <h3>Ruler Tours</h3>
-          <p>Next-gen travel & premium itineraries</p>
+            <!-- BIKE RENTALS -->
+            <div class="rental-section-header reveal">
+                <span class="rental-section-icon">🏍️</span>
+                <h2>Bike Rentals</h2>
+            </div>
+
+            <div class="rentals-grid" id="bikeGrid"></div>
+
         </div>
+    </section>
 
-        <div>
-          <h4>Explore</h4>
-          <p><a href="tours.html">Tours</a></p>
-          <p><a href="rentals.html">Rentals</a></p>
-        </div>
+    <!-- Footer injected by script.js -->
 
-        <div class="flex-fill text-right">
-          <h4>Have Questions?</h4>
-          <p>Get a response within 24 hours.</p>
-          <a
-            href="contact.html"
-            class="btn-primary btn-white-primary"
-            >Contact Us</a
-          >
-        </div>
-      </div>
-
-      <p class="copyright">&copy; 2026 Ruler Tours. All rights reserved.</p>
-    </footer>
-
-    <script type="module" src="javascript/rental-logic.js"></script>
+    <!-- Data + Scripts -->
+    <script src="db/rental-vehicle-data.js"></script>
     <script src="javascript/script.js"></script>
-  </body>
+    <script>
+        function renderVehicles(containerId, data) {
+            const grid = document.getElementById(containerId);
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            data.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'rental-card reveal';
+
+                card.innerHTML = `
+                    <div class="rental-card-img">
+                        <img src="${v.img}" alt="${v.name}" loading="lazy">
+                        <span class="rental-card-type-badge">${v.type}</span>
+                    </div>
+                    <div class="rental-card-body">
+                        <h3 class="rental-card-name">${v.name}</h3>
+                        <div class="rental-meta">
+                            <div class="rental-meta-row">
+                                <i class="fas fa-users"></i>
+                                <span>${v.seats} Seater</span>
+                            </div>
+                            <div class="rental-meta-row">
+                                <i class="far fa-clock"></i>
+                                <span>${v.timing}</span>
+                            </div>
+                            <div class="rental-meta-row">
+                                <i class="fas fa-gas-pump"></i>
+                                <span>${v.fuel} &nbsp;·&nbsp; ${v.driver}</span>
+                            </div>
+                            <div class="rental-meta-row">
+                                <i class="fas fa-star"></i>
+                                <span>${v.features.slice(0, 3).join(' · ')}</span>
+                            </div>
+                        </div>
+                        <div class="rental-card-footer">
+                            <div class="rental-price-wrap">
+                                <div class="rental-price-label">Per Day</div>
+                                <div class="rental-price">${v.price}<span>/day</span></div>
+                            </div>
+                            <a href="contact.html" class="btn btn-primary" style="font-size:0.82rem;padding:9px 18px;">
+                                Book Now <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Trigger reveal
+            setTimeout(() => {
+                document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+            }, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderVehicles('carGrid', carRentals);
+            renderVehicles('bikeGrid', bikeRentals);
+        });
+    </script>
+</body>
 </html>

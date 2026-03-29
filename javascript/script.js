@@ -1,400 +1,423 @@
 /**
- * ============================================
- * NAVBAR INJECTION - MINIMAL IMPLEMENTATION
- * ============================================
+ * javascript/script.js
+ * Ruler Tours — Shared JavaScript
+ * Handles: Navbar injection, theme toggle, mobile menu,
+ *          auth forms, contact form, scroll reveal, toast
  */
 
-// Load navbar.html and inject into page
-async function loadNavbarComponent() {
-    try {
-        const currentPath = window.location.pathname;
+/* ============================================================
+   NAVBAR INJECTION
+   ============================================================ */
 
-        // --- INLINED NAVBAR HTML ---
-        const navbarHTML = `
-        <nav class="navbar" id="main-navbar">
-            <div class="nav-left">
-                <a href="index.html" class="logo-link">
-                    <img src="assets/light_logo.png" id="logo" class="logo" alt="Ruler Tours Logo">
-                    <h2>Ruler Tours</h2>
-                </a>
-            </div>
+function buildNavbar() {
+    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 
-            <ul class="nav-links" id="nav-links">
-                <li><a href="index.html" data-page="index.html">Home</a></li>
-                <li><a href="tours.html" data-page="tours.html">Tours</a></li>
-                <li><a href="rentals.html" data-page="rentals.html">Rentals</a></li>
-                <li><a href="about.html" data-page="about.html">About</a></li>
+    // Determine relative prefix based on current file location
+    // Pages in root: no prefix. Pages in sub-folder: '../'
+    // All our pages are in root, so prefix = ''
+    const prefix = '';
+
+    const pages = [
+        { href: 'index.html',   label: 'Home' },
+        { href: 'tours.html',   label: 'Tours' },
+        { href: 'rentals.html', label: 'Rentals' },
+        { href: 'about.html',   label: 'About' },
+        { href: 'contact.html', label: 'Contact' }
+    ];
+
+    const navLinksHTML = pages.map(p => {
+        const active = currentFile === p.href ? 'active' : '';
+        return `<li><a href="${prefix}${p.href}" class="${active}">${p.label}</a></li>`;
+    }).join('');
+
+    const mobileLinksHTML = pages.map(p => {
+        const active = currentFile === p.href ? 'active' : '';
+        return `<a href="${prefix}${p.href}" class="${active}">${p.label}</a>`;
+    }).join('');
+
+    const isAuthPage = ['login.html', 'signup.html'].includes(currentFile);
+
+    const navbarHTML = `
+    <nav class="navbar" id="main-navbar">
+        <div class="container">
+            <a href="${prefix}index.html" class="nav-brand">
+                <img src="${prefix}assets/logo.png" alt="Ruler Tours Logo" 
+                     onerror="this.style.display='none'">
+                <div class="nav-brand-text">
+                    <span class="nav-brand-name">Ruler Tours</span>
+                    <span class="nav-brand-tagline">We Burn Fuel, You Make Memories</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                ${navLinksHTML}
             </ul>
 
             <div class="nav-right">
-                <button id="theme-toggle">🌙</button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    🌙
+                </button>
+                ${!isAuthPage ? `
+                <a href="${prefix}login.html" class="btn-login">Login</a>
+                <a href="${prefix}signup.html" class="btn-signup">Sign Up</a>
+                ` : ''}
+            </div>
 
-                <!-- Auth Buttons -->
-                <a href="login.html" id="auth-btn" class="btn-login">Login</a>
-                <a href="signup.html" id="signup-btn" class="btn-primary btn-small">Sign Up</a>
+            <button class="hamburger" id="hamburger" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
 
-                <!-- Profile (Hidden by default) -->
-                <div class="profile-container" id="profile-trigger">
-                    <img src="" class="profile-avatar" alt="User">
-                    <div class="profile-dropdown" id="profile-dropdown">
-                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <!-- Mobile Menu -->
+    <nav class="mobile-nav" id="mobileNav">
+        ${mobileLinksHTML}
+        ${!isAuthPage ? `
+        <hr class="mobile-nav-divider">
+        <div class="mobile-nav-btns">
+            <a href="${prefix}login.html" class="btn-login">Login</a>
+            <a href="${prefix}signup.html" class="btn-signup">Sign Up</a>
+        </div>
+        ` : ''}
+    </nav>
+    `;
+
+    // Inject at top of body
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+}
+
+
+/* ============================================================
+   FOOTER INJECTION
+   ============================================================ */
+
+function buildFooter() {
+    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+    const isAuthPage  = ['login.html', 'signup.html'].includes(currentFile);
+    if (isAuthPage) return; // No footer on auth pages
+
+    const footerHTML = `
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand-name">👑 Ruler Tours</div>
+                    <div class="footer-tagline">"We Burn Fuel, You Make Memories"</div>
+                    <p class="footer-desc">
+                        Budget-friendly, curated travel experiences across North Bengal —
+                        from misty Himalayan peaks to wild jungle safaris.
+                    </p>
+                    <div class="footer-socials">
+                        <a class="footer-social-link" href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
 
-                <div class="hamburger" id="hamburger">☰</div>
+                <!-- Quick Links -->
+                <div>
+                    <div class="footer-col-title">Explore</div>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="tours.html">Tour Packages</a>
+                        <a href="rentals.html">Vehicle Rentals</a>
+                        <a href="about.html">About Us</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                </div>
+
+                <!-- Destinations -->
+                <div>
+                    <div class="footer-col-title">Destinations</div>
+                    <div class="footer-links">
+                        <a href="tours.html">Darjeeling</a>
+                        <a href="tours.html">Kurseong</a>
+                        <a href="tours.html">Lava & Loleygaon</a>
+                        <a href="tours.html">Dooars & Jaldapara</a>
+                        <a href="tours.html">Kalimpong</a>
+                        <a href="tours.html">Sittong (Offbeat)</a>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <div class="footer-col-title">Contact Us</div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone"></i>
+                        +91 98765 43210
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        contact@rulertours.com
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Siliguri, West Bengal, India
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="far fa-clock"></i>
+                        Mon–Sat: 9AM – 7PM
+                    </div>
+                </div>
             </div>
-        </nav>
-        `;
 
-        // Insert navbar at top of body
-        document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Ruler Tours. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="contact.html">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    `;
 
-        // --- DYNAMIC LINK FIXING ---
-        const isInHtmlFolder = window.location.pathname.includes('/html/');
-        const prefix = isInHtmlFolder ? '../' : '';
-        const navbar = document.querySelector('.navbar');
-        if (navbar) {
-            // Fix Logo Path
-            const logo = navbar.querySelector('#logo');
-            if (logo) {
-                // Initial logo based on current body class
-                const isDark = document.body.classList.contains('dark');
-                logo.src = prefix + (isDark ? 'assets/light_logo.png' : 'assets/dark_logo.png');
-            }
-        }
-
-        return true;
-    } catch (error) {
-        return false;
-    }
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
 }
 
-// Update logo based on theme
-function updateLogoForTheme() {
-    const logoImg = document.getElementById('logo');
-    if (!logoImg) return;
 
-    const isLightPage = window.location.pathname.includes('/html/');
-    const darkThemeActive = document.body.classList.contains('dark');
+/* ============================================================
+   THEME
+   ============================================================ */
 
-    if (isLightPage) {
-        // Pages in /html folder
-        logoImg.src = darkThemeActive ? '../assets/light_logo.png' : '../assets/dark_logo.png';
-    } else {
-        // Root level pages
-        logoImg.src = darkThemeActive ? 'assets/light_logo.png' : 'assets/dark_logo.png';
-    }
+function initTheme() {
+    const saved = localStorage.getItem('rt-theme') || 'light';
+    if (saved === 'dark') document.body.classList.add('dark');
+    updateThemeBtn();
 }
 
-// Highlight current page link in navbar
-function highlightActivePage() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-links a');
-
-    navLinks.forEach(link => {
-        const dataPage = link.getAttribute('data-page');
-        if (dataPage === currentPage) {
-            link.classList.add('active');
-        }
-    });
+function updateThemeBtn() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
 }
 
-// ========================================
-// MAIN: Initialize on page load
-document.addEventListener("DOMContentLoaded", async function () {
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('rt-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    updateThemeBtn();
+}
 
-    // Load navbar
-    const navbarLoaded = await loadNavbarComponent();
 
-    if (!navbarLoaded) {
-        // Navbar failed to load, but continue with auth setup
-    }
+/* ============================================================
+   HAMBURGER / MOBILE MENU
+   ============================================================ */
 
-    // Setup navbar interactions
+function initMobileMenu() {
     const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-    const navLinkItems = document.querySelectorAll('.nav-links a');
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+    const mobileNav = document.getElementById('mobileNav');
+    if (!hamburger || !mobileNav) return;
 
-    // Hamburger menu toggle
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function () {
-            navLinks.classList.toggle('active');
-            body.classList.toggle('no-scroll');
-        });
-
-        navLinkItems.forEach(link => {
-            link.addEventListener('click', function () {
-                navLinks.classList.remove('active');
-                body.classList.remove('no-scroll');
-            });
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
-                navLinks.classList.remove('active');
-                body.classList.remove('no-scroll');
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            if (window.innerWidth > 768) {
-                navLinks.classList.remove('active');
-                body.classList.remove('no-scroll');
-            }
-        });
-    }
-
-    // Theme toggle
-    if (themeToggle) {
-        // Apply saved theme on page load
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.add('dark');
-            themeToggle.textContent = '☀️';
-        }
-        updateLogoForTheme();
-
-        themeToggle.addEventListener('click', function () {
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                localStorage.setItem('theme', 'dark');
-                themeToggle.textContent = '☀️';
-            } else {
-                localStorage.setItem('theme', 'light');
-                themeToggle.textContent = '🌙';
-            }
-            updateLogoForTheme();
-        });
-    }
-
-    // Highlight active page
-    highlightActivePage();
-
-    // ========== EXISTING AUTH & FORM CODE CONTINUES BELOW ===========
-
-    // --- AUTH INTEGRATION ---
-
-    // Helper for Toast Notifications
-    function showToast(message, type = "success") {
-        if (typeof Toastify !== 'undefined') {
-            Toastify({
-                text: message,
-                duration: 3000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: type === "success" ? "#2E7D32" : "#D32F2F",
-                close: true
-            }).showToast();
-        } else {
-            // Fallback: native alert or console
-            console.log(`${type.toUpperCase()}: ${message}`);
-            alert(message); // Simple fallback
-        }
-    }
-
-    // UI State Management - Unified
-    function updateNavForUser() {
-        const authBtn = document.getElementById("auth-btn");
-        const signupBtn = document.getElementById("signup-btn");
-        const profileCont = document.getElementById("profile-trigger");
-
-        // Token is now handled via httpOnly cookies, check user data for auth state
-        let user = null;
-        try {
-            const userStr = localStorage.getItem("user");
-            if (userStr && userStr !== "undefined") {
-                user = JSON.parse(userStr);
-            }
-        } catch (e) {
-            localStorage.removeItem("user"); // clear corrupted data
-        }
-
-        if (user) {
-            // Logged in state: Hide signup button, update authBtn to Logout, show profile
-            if (signupBtn) signupBtn.style.display = "none";
-
-            if (authBtn) {
-                authBtn.style.display = "none";
-            }
-
-            if (profileCont) {
-                profileCont.style.display = "inline-block";
-                const avatarImg = profileCont.querySelector(".profile-avatar");
-                if (avatarImg) {
-                    avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff`;
-                }
-            }
-
-            const profileName = document.querySelector(".profile-left h2");
-            if (profileName && user.name) profileName.textContent = user.name;
-
-        } else {
-            // Logged out state
-            if (authBtn) {
-                authBtn.style.display = "inline-block";
-                authBtn.textContent = "Login";
-                authBtn.href = "login.html";
-                authBtn.classList.add("btn-login");
-                authBtn.classList.remove("btn-logout");
-                authBtn.style.backgroundColor = "";
-                authBtn.style.color = "";
-                authBtn.style.border = "";
-                authBtn.onclick = null;
-            }
-            if (signupBtn) signupBtn.style.display = "inline-block";
-            if (profileCont) profileCont.style.display = "none";
-        }
-    }
-
-    // Initialize UI on page load
-    updateNavForUser();
-
-    // --- PROFILE DROPDOWN logic ---
-    function setupProfileDropdown() {
-        const profileTrigger = document.getElementById('profile-trigger');
-        const profileDropdown = document.getElementById('profile-dropdown');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        if (profileTrigger && profileDropdown) {
-            // Toggle dropdown on click
-            profileTrigger.addEventListener('click', function (e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('active');
-            });
-
-            // Close dropdown when clicking elsewhere
-            document.addEventListener('click', function (e) {
-                if (!profileTrigger.contains(e.target)) {
-                    profileDropdown.classList.remove('active');
-                }
-            });
-        }
-
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                // Clear auth data
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-
-                showToast("Logged out successfully");
-
-                // Redirect to home and refresh
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
-            });
-        }
-    }
-
-    // Sign Up Logic - form submission
-    const signupForm = document.getElementById("signupForm");
-    if (signupForm) {
-        signupForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            location.reload();
-        });
-    }
-
-    // Login Logic - form submission
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            location.reload();
-        });
-    }
-
-    // Forgot Password Logic - form submission
-    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-    if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            location.reload();
-        });
-    }
-
-    // Reset Password Logic - form submission
-    const resetPasswordForm = document.getElementById("resetPasswordForm");
-    if (resetPasswordForm) {
-        resetPasswordForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            location.reload();
-        });
-    }
-
-    // Initialize UI on page load
-    updateNavForUser();
-    setupProfileDropdown();
-
-});
-
-/* ==============================
-   PASSWORD SHOW / HIDE TOGGLE
-============================== */
-
-const passwordToggles = document.querySelectorAll(".toggle-password");
-
-passwordToggles.forEach(icon => {
-    icon.addEventListener("click", function () {
-
-        const input = document.getElementById(this.dataset.target);
-
-        if (!input) return;
-
-        if (input.type === "password") {
-            input.type = "text";
-            this.classList.remove("fa-eye");
-            this.classList.add("fa-eye-slash");
-        } else {
-            input.type = "password";
-            this.classList.remove("fa-eye-slash");
-            this.classList.add("fa-eye");
-        }
+    hamburger.addEventListener('click', () => {
+        const isOpen = mobileNav.classList.toggle('open');
+        hamburger.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
     });
-});
 
-/* ===============================
-   SCROLL REVEAL ANIMATION
-================================ */
+    // Close on link click
+    mobileNav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            hamburger.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    });
 
-const revealElements = document.querySelectorAll(".reveal");
-
-function revealOnScroll() {
-    const windowHeight = window.innerHeight;
-
-    revealElements.forEach(el => {
-        const elementTop = el.getBoundingClientRect().top;
-
-        if (elementTop < windowHeight - 100) {
-            el.classList.add("active");
+    // Close on outside click
+    document.addEventListener('click', e => {
+        if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+            mobileNav.classList.remove('open');
+            hamburger.classList.remove('open');
+            document.body.style.overflow = '';
         }
     });
 }
 
-window.addEventListener("scroll", revealOnScroll);
-revealOnScroll();
 
-/* ===============================
-   SCROLL TO TOP BUTTON
-================================ */
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
 
-const scrollBtn = document.getElementById("scrollTopBtn");
+function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
 
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 200) {
-        scrollBtn.classList.add("show");
-    } else {
-        scrollBtn.classList.remove("show");
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 70);
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    els.forEach(el => obs.observe(el));
+}
+
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   ============================================================ */
+
+function showToast(message, type = 'success') {
+    let toast = document.getElementById('rt-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'rt-toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
     }
-});
 
-scrollBtn.addEventListener("click", () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    toast.classList.add('show');
+
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+
+/* ============================================================
+   PASSWORD TOGGLE
+   ============================================================ */
+
+function initPasswordToggles() {
+    document.querySelectorAll('.auth-toggle-pw').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const input = this.closest('.auth-input-wrap').querySelector('.auth-input');
+            if (!input) return;
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            this.innerHTML = isText
+                ? '<i class="fas fa-eye"></i>'
+                : '<i class="fas fa-eye-slash"></i>';
+        });
     });
+}
+
+
+/* ============================================================
+   AUTH FORMS (Frontend only — no backend)
+   ============================================================ */
+
+function initAuthForms() {
+    // Login
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', e => {
+            e.preventDefault();
+            showToast('Welcome back! Redirecting…');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+        });
+    }
+
+    // Signup
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const pw  = document.getElementById('signupPw')?.value || '';
+            const cpw = document.getElementById('signupCpw')?.value || '';
+            if (pw !== cpw) {
+                showToast('Passwords do not match.', 'error');
+                return;
+            }
+            showToast('Account created! Welcome to Ruler Tours.');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1400);
+        });
+    }
+}
+
+
+/* ============================================================
+   CONTACT FORM
+   ============================================================ */
+
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const success = document.getElementById('cfSuccess');
+        if (success) success.classList.add('show');
+        form.querySelector('[type="submit"]').style.display = 'none';
+        showToast('Message sent! We\'ll reply within 24 hours.');
+    });
+}
+
+
+/* ============================================================
+   MODAL (Generic)
+   ============================================================ */
+
+function openModal(id) {
+    const backdrop = document.getElementById(id);
+    if (!backdrop) return;
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+    const backdrop = document.getElementById(id);
+    if (!backdrop) return;
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function initModals() {
+    // Close on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', e => {
+            if (e.target === backdrop) closeModal(backdrop.id);
+        });
+    });
+
+    // Close button
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const backdrop = btn.closest('.modal-backdrop');
+            if (backdrop) closeModal(backdrop.id);
+        });
+    });
+}
+
+
+/* ============================================================
+   INIT — runs on every page
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Apply saved theme BEFORE building navbar (prevents flash)
+    initTheme();
+
+    // 2. Build navbar & footer
+    buildNavbar();
+    buildFooter();
+
+    // 3. Wire up theme toggle (injected by buildNavbar)
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+    // 4. Mobile menu
+    initMobileMenu();
+
+    // 5. Scroll reveal
+    initReveal();
+    window.addEventListener('scroll', initReveal, { passive: true });
+
+    // 6. Auth forms
+    initAuthForms();
+    initPasswordToggles();
+
+    // 7. Contact form
+    initContactForm();
+
+    // 8. Modals
+    initModals();
 });

@@ -1,34 +1,65 @@
-# 👑 Ruler Tours - Startup Skeleton
+# 👑 Ruler Tours — Frontend
 
-Ruler Tours is a travel startup specializing in curated experiences across **North Bengal** (Darjeeling, Kurseong, Dooars) and premium **Vehicle Rentals**.
+Budget-friendly travel agency website for **North Bengal, West Bengal, India**.
 
-This project is a **Skeleton Structure** built with vanilla HTML, CSS, and JS. It is designed specifically for an Open Source Event to showcase how contributors can collaborate on a startup idea.
+**Tagline:** *"We Burn Fuel, You Make Memories"*
 
 ---
 
 ## 📂 Project Structure
 
-The project is organized into four main directories to keep code modular:
-
-- `/`: Contains all page views (Destinations, Rentals, About, Contact).
-- `/css`: Contains stylesheets (Global and Page-specific).
-- `/javascript`: Contains the logic (script.js).
-- `/assets`: Contains logos and images.
-- `/db`: Contains the data for the pages like the rentals (rental-vehicle-data.js)
+```
+/
+├── index.html          ← Home page
+├── tours.html          ← Tour packages (dynamically rendered)
+├── rentals.html        ← Vehicle rentals (dynamically rendered)
+├── about.html          ← About the agency
+├── contact.html        ← Contact & enquiry form
+├── login.html          ← Login page
+├── signup.html         ← Sign up page
+│
+├── css/
+│   ├── global.css      ← Shared styles: reset, navbar, footer, utilities, buttons
+│   ├── home.css        ← Home page specific styles (hero, destinations, etc.)
+│   ├── tours.css       ← Tours page styles (filter bar, tour cards, modal)
+│   └── pages.css       ← Rentals, auth (login/signup), contact page styles
+│
+├── javascript/
+│   └── script.js       ← All shared JS: navbar injection, footer injection,
+│                          theme toggle, mobile menu, scroll reveal,
+│                          toast notifications, auth forms, contact form
+│
+├── db/
+│   ├── tour-data.js            ← Array of North Bengal tour packages
+│   └── rental-vehicle-data.js  ← Arrays of car & bike rental data
+│
+└── assets/
+    ├── logo.png        ← Navbar logo (place your logo here)
+    └── favicon.png     ← Browser tab icon
+```
 
 ---
 
-## 🗺️ Targeted Locations
+## 🔌 How it Works
 
-Our current focus is exclusively on the **Northern part of West Bengal, India (North Bengal)**:
-
-- Darjeeling 🏔️
-- Kurseong 🚂
-- Mirik 🏖️
-- Kalimpong 🌸
-- Dooars & Jaldapara 🐘
-- And many more locations as you want to add in this region
+### Navbar & Footer
+Both are injected dynamically by `javascript/script.js` on every page — so you only maintain them in **one place**.
 
 ---
 
-_Created for the Ruler Tours Open Source Showcase - JWoC 2026_
+## 🎨 Customisation
+
+All colors are CSS variables in `css/global.css`:
+```css
+--green:       #2E7D32   /* Primary brand green */
+--orange:      #FF8F00   /* Accent orange */
+--green-pale:  #E8F5E9   /* Light green backgrounds */
+--orange-pale: #FFF8E1   /* Light orange backgrounds */
+```
+
+Change any of these to rebrand the entire site instantly.
+
+---
+
+## 🌙 Dark Mode
+Users can toggle dark mode via the moon/sun button in the navbar. Preference is saved to `localStorage`.

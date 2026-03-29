@@ -1,71 +1,225 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruler Tours</title>
-    <link rel="icon" type="image/png" href="assets/light_logo.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="javascript/auth-guard.js"></script>
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Packages — Ruler Tours</title>
+    <meta name="description" content="Explore budget-friendly tour packages to Darjeeling, Dooars, Kalimpong, Jaldapara and more North Bengal destinations.">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
 
-  <body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Scroll to top button -->
-    <button id="scrollTopBtn">⬆</button>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/tours.css">
+</head>
+<body>
 
+    <!-- Navbar injected by script.js -->
+
+    <!-- Page Hero -->
     <section class="page-hero">
-      <h1>Next-Gen Tour Packages</h1>
-    </section>
-    <section class="card-container" id="tour-cards-container">
-      <!-- Dynamic cards will be generated here -->
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="index.html">Home</a> &rsaquo; Tours
+            </nav>
+            <h1><i class="fas fa-map-marked-alt" style="margin-right:10px;opacity:0.8;"></i>Tour Packages</h1>
+            <p>Handpicked journeys across North Bengal — starting at just ₹6,500</p>
+        </div>
     </section>
 
-    <!-- Tour Details Modal -->
-    <div id="tourModal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" id="closeModal">&times;</span>
-        <div id="modal-body">
-          <!-- Dynamic modal content will be populated here -->
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <span class="filter-label">Filter:</span>
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="Hills">Hills</button>
+                <button class="filter-btn" data-filter="Wildlife">Wildlife</button>
+                <button class="filter-btn" data-filter="Tea Garden">Tea Garden</button>
+                <button class="filter-btn" data-filter="Heritage">Heritage</button>
+                <button class="filter-btn" data-filter="Offbeat">Offbeat</button>
+                <div class="filter-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="tourSearch" placeholder="Search destinations…" autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Tours Grid (populated by JS) -->
+            <div class="tours-grid" id="toursGrid"></div>
+
         </div>
-      </div>
+    </section>
+
+    <!-- Tour Detail Modal -->
+    <div class="modal-backdrop" id="tourModalBackdrop">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="tourModalTitle">
+            <button class="modal-close" aria-label="Close">&times;</button>
+            <img id="tourModalImg" class="tour-modal-img" src="" alt="">
+            <div class="tour-modal-body">
+                <div class="tour-modal-tags" id="tourModalTags"></div>
+                <h2 class="tour-modal-title" id="tourModalTitle"></h2>
+                <div class="tour-modal-price" id="tourModalPrice"></div>
+
+                <div class="tour-modal-meta" id="tourModalMeta"></div>
+
+                <p class="tour-modal-desc" id="tourModalDesc"></p>
+
+                <div class="tour-modal-highlights" id="tourModalHighlights"></div>
+
+                <div class="tour-modal-actions">
+                    <a href="contact.html" class="btn btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book This Tour
+                    </a>
+                    <button class="btn btn-outline" onclick="closeModal('tourModalBackdrop')">
+                        Back to Tours
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <footer class="footer">
-      <div class="footer-content">
-        <div>
-          <h3>Ruler Tours</h3>
-          <p>Next-gen travel & premium itineraries</p>
-        </div>
 
-        <div>
-          <h4>Explore</h4>
-          <p><a href="tours.html">Tours</a></p>
-          <p><a href="rentals.html">Rentals</a></p>
-        </div>
+    <!-- Footer injected by script.js -->
 
-        <div class="flex-fill text-right">
-          <h4>Have Questions?</h4>
-          <p>Get a response within 24 hours.</p>
-          <a
-            href="contact.html"
-            class="btn-primary btn-white-primary"
-            >Contact Us</a
-          >
-        </div>
-      </div>
-
-      <p class="copyright">&copy; 2026 Ruler Tours. All rights reserved.</p>
-    </footer>
-    <script src="javascript/toursData.js"></script>
-    <script src="javascript/tours.js"></script>
+    <!-- Data + Scripts -->
+    <script src="db/tour-data.js"></script>
     <script src="javascript/script.js"></script>
-  </body>
+    <script>
+        /* ── Tours Page Logic ── */
+        let activeFilter = 'all';
+        let searchQuery  = '';
+
+        function renderTours() {
+            const grid = document.getElementById('toursGrid');
+            if (!grid) return;
+
+            const filtered = northBengalTours.filter(t => {
+                const matchFilter = activeFilter === 'all' || t.tags.includes(activeFilter);
+                const q = searchQuery.toLowerCase();
+                const matchSearch = !q
+                    || t.name.toLowerCase().includes(q)
+                    || t.tags.some(tag => tag.toLowerCase().includes(q))
+                    || t.desc.toLowerCase().includes(q);
+                return matchFilter && matchSearch;
+            });
+
+            grid.innerHTML = '';
+
+            if (!filtered.length) {
+                grid.innerHTML = `
+                    <div class="no-results reveal">
+                        <i class="fas fa-search"></i>
+                        <p>No tours found. Try a different filter or keyword.</p>
+                    </div>`;
+                return;
+            }
+
+            filtered.forEach(tour => {
+                const card = document.createElement('div');
+                card.className = 'tour-card reveal';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `View details for ${tour.name}`);
+
+                card.innerHTML = `
+                    <div class="tour-card-img">
+                        <img src="${tour.img}" alt="${tour.name}" loading="lazy">
+                        <span class="tour-card-badge">${tour.badge}</span>
+                        <span class="tour-card-duration">
+                            <i class="far fa-clock"></i> ${tour.duration}
+                        </span>
+                    </div>
+                    <div class="tour-card-body">
+                        <div class="tour-card-tags">
+                            ${tour.tags.map(t => `<span class="tour-tag">${t}</span>`).join('')}
+                        </div>
+                        <h3 class="tour-card-name">${tour.name}</h3>
+                        <p class="tour-card-desc">${tour.desc.substring(0, 110)}…</p>
+                        <div class="tour-card-footer">
+                            <div class="tour-price-wrap">
+                                <div class="tour-price-from">Starting from</div>
+                                <div class="tour-price">${tour.price}</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="openTourModal('${tour.id}')">
+                                Details <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') openTourModal(tour.id);
+                });
+
+                grid.appendChild(card);
+            });
+
+            // Trigger reveal on new cards
+            document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+                setTimeout(() => el.classList.add('visible'), 50);
+            });
+        }
+
+        function openTourModal(id) {
+            const tour = northBengalTours.find(t => t.id === id);
+            if (!tour) return;
+
+            document.getElementById('tourModalImg').src  = tour.img;
+            document.getElementById('tourModalImg').alt  = tour.name;
+            document.getElementById('tourModalTitle').textContent = tour.name;
+            document.getElementById('tourModalPrice').textContent = `${tour.price} per person`;
+
+            document.getElementById('tourModalTags').innerHTML =
+                tour.tags.map(t => `<span class="tour-tag">${t}</span>`).join('');
+
+            document.getElementById('tourModalMeta').innerHTML = `
+                <div class="tour-modal-meta-item">
+                    <div class="tour-modal-meta-label">Duration</div>
+                    <div class="tour-modal-meta-val">${tour.duration}</div>
+                </div>
+                <div class="tour-modal-meta-item">
+                    <div class="tour-modal-meta-label">Best Time</div>
+                    <div class="tour-modal-meta-val">${tour.bestTime}</div>
+                </div>
+                <div class="tour-modal-meta-item">
+                    <div class="tour-modal-meta-label">Max Group</div>
+                    <div class="tour-modal-meta-val">${tour.maxGroup}</div>
+                </div>
+            `;
+
+            document.getElementById('tourModalDesc').textContent = tour.desc;
+
+            document.getElementById('tourModalHighlights').innerHTML = `
+                <h4>Trip Highlights</h4>
+                <ul>${tour.highlights.map(h => `
+                    <li><i class="fas fa-check-circle"></i> ${h}</li>
+                `).join('')}</ul>
+            `;
+
+            openModal('tourModalBackdrop');
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                activeFilter = this.dataset.filter;
+                renderTours();
+            });
+        });
+
+        // Search
+        document.getElementById('tourSearch')?.addEventListener('input', function () {
+            searchQuery = this.value.trim();
+            renderTours();
+        });
+
+        // Initial render (waits for DOMContentLoaded fired by script.js)
+        document.addEventListener('DOMContentLoaded', renderTours);
+    </script>
+</body>
 </html>

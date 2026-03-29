@@ -1,142 +1,185 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us | Ruler Tours - Premium Travel Concierge</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/contact.css" />
-    <script src="javascript/auth-guard.js"></script>
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us — Ruler Tours</title>
+    <meta name="description" content="Get in touch with Ruler Tours. Plan your North Bengal trip, ask about tours or rentals.">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
 
-  <body class="dark">
-    <div id="navbar-container"></div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <header class="contact-hero">
-      <h1 class="reveal">Experience the VIP Service</h1>
-      <p class="reveal">
-        Our expert travel designers are ready to craft your next masterwork
-        journey.
-      </p>
-    </header>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
 
-    <main class="contact-main">
-      <div class="contact-grid">
-        <div class="contact-info-panel reveal">
-          <div class="info-card">
-            <i class="fas fa-paper-plane"></i>
-            <h3>Digital Concierge</h3>
-            <p>
-              Reach us anytime for booking inquiries<br /><strong
-                >info@rulertours.com</strong
-              >
-            </p>
-          </div>
+    <!-- Navbar injected by script.js -->
 
-          <div class="info-card">
-            <i class="fas fa-phone-alt"></i>
-            <h3>Direct Connect</h3>
-            <p>
-              Speak with a travel expert directly<br /><strong
-                >+1 800 555 RULER</strong
-              >
-            </p>
-          </div>
-
-          <div class="info-card">
-            <i class="fas fa-map-marker-alt"></i>
-            <h3>Global Headquarters</h3>
-            <p>Metro City Hub, Sector 4<br />New Delhi, India</p>
-          </div>
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <nav class="breadcrumb"><a href="index.html">Home</a> &rsaquo; Contact</nav>
+            <h1><i class="fas fa-envelope" style="margin-right:10px;opacity:0.8;"></i>Get In Touch</h1>
+            <p>We typically respond within 4 hours — plan your North Bengal adventure with us!</p>
         </div>
+    </section>
 
-        <div class="contact-form-panel reveal">
-          <h2>Send an Inquiry</h2>
-          <form id="contactForm" method="POST">
-            <div class="premium-input-group">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Full Name"
-                required
-              />
+    <!-- Contact Section -->
+    <section class="section">
+        <div class="container">
+            <div class="contact-grid">
+
+                <!-- Info Column -->
+                <div class="reveal">
+                    <span class="section-label">📞 Contact Info</span>
+                    <h2 class="contact-info-title" style="margin-top:10px;">We're Here to Help</h2>
+                    <p class="contact-info-sub">
+                        Have questions about our tours, rentals, or want a custom itinerary?
+                        Drop us a message or call — we love talking travel!
+                    </p>
+
+                    <div class="contact-detail-item">
+                        <div class="contact-detail-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <div class="contact-detail-label">Phone / WhatsApp</div>
+                            <div class="contact-detail-value">+91 98765 43210</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-detail-item">
+                        <div class="contact-detail-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <div class="contact-detail-label">Email</div>
+                            <div class="contact-detail-value">contact@rulertours.com</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-detail-item">
+                        <div class="contact-detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <div class="contact-detail-label">Office Location</div>
+                            <div class="contact-detail-value">Siliguri, West Bengal, India</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-detail-item">
+                        <div class="contact-detail-icon">
+                            <i class="far fa-clock"></i>
+                        </div>
+                        <div>
+                            <div class="contact-detail-label">Office Hours</div>
+                            <div class="contact-detail-value">Mon – Sat: 9:00 AM – 7:00 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-socials">
+                        <a class="contact-social-btn" href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a class="contact-social-btn" href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="contact-social-btn" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a class="contact-social-btn" href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+
+                    <!-- Quick links -->
+                    <div style="margin-top:36px;padding:20px;background:var(--green-pale);border-radius:var(--radius);border:1px solid #c8e6c9;">
+                        <p style="font-size:0.82rem;color:var(--green-dark);font-weight:600;margin-bottom:12px;">
+                            <i class="fas fa-bolt" style="margin-right:6px;"></i> Quick Actions
+                        </p>
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            <a href="tours.html" class="btn btn-primary" style="justify-content:center;font-size:0.82rem;">
+                                <i class="fas fa-map-marked-alt"></i> Browse Tour Packages
+                            </a>
+                            <a href="rentals.html" class="btn btn-outline" style="justify-content:center;font-size:0.82rem;">
+                                <i class="fas fa-car"></i> View Rentals
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Column -->
+                <div class="reveal">
+                    <div class="contact-form-card">
+                        <h3 class="contact-form-title">
+                            <i class="fas fa-paper-plane" style="color:var(--green);margin-right:8px;"></i>
+                            Send Us a Message
+                        </h3>
+
+                        <!-- Success message (hidden by default) -->
+                        <div class="cf-success" id="cfSuccess">
+                            <i class="fas fa-check-circle" style="font-size:1.2rem;"></i>
+                            <span>Message sent! We'll get back to you within 4 hours.</span>
+                        </div>
+
+                        <form id="contactForm" novalidate>
+                            <div class="cf-row">
+                                <div class="cf-group">
+                                    <label class="cf-label" for="cfName">Your Name *</label>
+                                    <input type="text" id="cfName" class="cf-input" placeholder="Arjun Sharma" required>
+                                </div>
+                                <div class="cf-group">
+                                    <label class="cf-label" for="cfEmail">Email Address *</label>
+                                    <input type="email" id="cfEmail" class="cf-input" placeholder="you@email.com" required>
+                                </div>
+                            </div>
+
+                            <div class="cf-row">
+                                <div class="cf-group">
+                                    <label class="cf-label" for="cfPhone">Phone / WhatsApp</label>
+                                    <input type="tel" id="cfPhone" class="cf-input" placeholder="+91 9876543210">
+                                </div>
+                                <div class="cf-group">
+                                    <label class="cf-label" for="cfInterest">I'm Interested In</label>
+                                    <select id="cfInterest" class="cf-select">
+                                        <option value="">Select…</option>
+                                        <option>Tour Package</option>
+                                        <option>Vehicle Rental</option>
+                                        <option>Custom Itinerary</option>
+                                        <option>Group Booking (10+ people)</option>
+                                        <option>Corporate Tour</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="cf-group">
+                                <label class="cf-label" for="cfDates">Preferred Travel Dates</label>
+                                <input type="text" id="cfDates" class="cf-input" placeholder="e.g. 15–18 April 2026">
+                            </div>
+
+                            <div class="cf-group">
+                                <label class="cf-label" for="cfMessage">Your Message *</label>
+                                <textarea id="cfMessage" class="cf-textarea" placeholder="Tell us about your trip — destinations, group size, budget, or any questions…" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
-            <div class="premium-input-group">
-              <input
-                type="email"
-                name="email"
-                placeholder="Professional Email"
-                required
-              />
-            </div>
-            <div class="premium-input-group">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Contact Number (Optional)"
-              />
-            </div>
-            <div class="premium-input-group">
-              <textarea
-                name="message"
-                rows="6"
-                placeholder="Tell us about your dream destination..."
-                required
-              ></textarea>
-            </div>
-            <button type="submit" class="btn-premium-send">Send Message</button>
-          </form>
         </div>
-      </div>
+    </section>
 
-      <div class="map-placeholder reveal">
-        <div class="text-center">
-          <i
-            class="fas fa-globe-americas"
-            class="globe-icon"
-          ></i>
-          <h3>Interactive Destination Map Loading...</h3>
-          <p>
-            Visit us at our Delhi HQ for a personalized VR tour of your next
-            destination.
-          </p>
+    <!-- Map placeholder -->
+    <div style="background:var(--light-grey);height:280px;display:flex;align-items:center;justify-content:center;border-top:1px solid var(--border);">
+        <div style="text-align:center;color:var(--text-light);">
+            <i class="fas fa-map-marked-alt" style="font-size:2.5rem;margin-bottom:12px;display:block;color:var(--green);"></i>
+            <p style="font-size:0.9rem;font-weight:600;">Siliguri, West Bengal, India</p>
+            <p style="font-size:0.78rem;margin-top:4px;">The Gateway to North Bengal</p>
         </div>
-      </div>
-    </main>
+    </div>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div>
-          <h3>Ruler Tours</h3>
-          <p>Next-gen travel & premium itineraries</p>
-        </div>
-
-        <div>
-          <h4>Explore</h4>
-          <p><a href="tours.html">Tours</a></p>
-          <p><a href="rentals.html">Rentals</a></p>
-        </div>
-
-        <div>
-          <h4>Social</h4>
-          <div class="social-links">
-            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-          </div>
-        </div>
-      </div>
-      <p class="copyright">&copy; 2026 Ruler Tours. All rights reserved.</p>
-    </footer>
-
+    <!-- Footer injected by script.js -->
     <script src="javascript/script.js"></script>
-  </body>
+</body>
 </html>
