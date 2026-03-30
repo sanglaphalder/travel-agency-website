@@ -41,7 +41,7 @@ function buildNavbar() {
                     onerror="this.style.display='none'"
                 >
                 <img
-                    src="assets/dark_logo.png"
+                    src="assets/light_logo.png"
                     alt="Ruler Tours"
                     class="nav-logo nav-logo-dark"
                     onerror="this.style.display='none'"
